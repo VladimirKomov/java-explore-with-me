@@ -1,4 +1,7 @@
-package ru.practicum;
+package ru.practicum.mapper;
+
+import ru.practicum.dto.EndpointHitRequestDto;
+import ru.practicum.entity.EndpointHit;
 
 public class StatsMapper {
 

@@ -1,9 +1,12 @@
-package ru.practicum;
+package ru.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.practicum.entity.EndpointHit;
+import ru.practicum.dto.EndpointHitRequestDto;
+import ru.practicum.mapper.StatsMapper;
 import ru.practicum.service.StatsService;
 
 @RestController

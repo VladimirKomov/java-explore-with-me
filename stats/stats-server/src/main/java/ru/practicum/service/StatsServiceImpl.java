@@ -1,7 +1,7 @@
 package ru.practicum.service;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.EndpointHit;
+import ru.practicum.entity.EndpointHit;
 
 @Service
 public class StatsServiceImpl implements StatsService {
