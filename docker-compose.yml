@@ -8,7 +8,7 @@ services:
     ports:
       - "6540:5432"
     environment:
-      - POSTGRES_DB=stats-server
+      - POSTGRES_DB=stats_server
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
 
@@ -18,7 +18,7 @@ services:
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB=ewm-service
+      - POSTGRES_DB=ewm_server
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
 
@@ -29,7 +29,7 @@ services:
     depends_on:
       - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-server
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats_server
       - SPRING_DATASOURCE_USER=admin
       - SPRING_DATASOURCE_PASSWORD=admin
 
@@ -40,7 +40,7 @@ services:
     depends_on:
       - ewm-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-service
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm_server
       - SPRING_DATASOURCE_USER=admin
       - SPRING_DATASOURCE_PASSWORD=admin
       - EWM_STATS_SERVICE_URL=http://server:9090
