@@ -1,5 +1,4 @@
 version: '3.1'
-
 services:
 
   stats-db:
@@ -8,9 +7,9 @@ services:
     ports:
       - "6540:5432"
     environment:
-      - POSTGRES_DB=stats_server
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=stats-server
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
 
   ewm-db:
     image: postgres:14-alpine
@@ -18,30 +17,34 @@ services:
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB=ewm_server
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=ewm-service
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
 
   stats-server:
     build: stats/stats-server
+    container_name: stats-server
     ports:
       - "9090:9090"
+      - "9091:9091"
     depends_on:
       - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats_server
-      - SPRING_DATASOURCE_USER=admin
-      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-server
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
 
   ewm-service:
     build: main-service
+    container_name: ewm-service
     ports:
       - "8080:8080"
+      - "8081:8081"
     depends_on:
       - ewm-db
+      - stats-server
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm_server
-      - SPRING_DATASOURCE_USER=admin
-      - SPRING_DATASOURCE_PASSWORD=admin
-      - EWM_STATS_SERVICE_URL=http://server:9090
-
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-service
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - STATS_SERVER_URL=http://stats-server:9090
