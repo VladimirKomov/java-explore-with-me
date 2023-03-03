@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class ErrorResponse {
-    private final Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
     private String status;
     private String reason;
     private String message;
+    private final Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 }

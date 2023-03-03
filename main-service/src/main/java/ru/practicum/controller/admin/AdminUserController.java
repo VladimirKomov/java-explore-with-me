@@ -15,10 +15,10 @@ import javax.validation.constraints.Min;
 import java.util.Collection;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/admin/users")
 @RequiredArgsConstructor
-@Validated
 @Slf4j
 public class AdminUserController {
 
@@ -42,15 +42,16 @@ public class AdminUserController {
     @GetMapping
     public Collection<UserResponseDto> findUsersByParameters(
             @RequestParam(required = false) List<Long> ids,
-            @Min(0) @RequestParam(defaultValue = "0") Integer from,
-            @Min(1) @RequestParam(defaultValue = "10") Integer size) {
+            @RequestParam(defaultValue = "0") @Min(0) Integer from,
+            @RequestParam(defaultValue = "10") @Min(1) Integer size) {
         log.info("GET users ids={}, from={}, size={}", ids, from, size);
         return UserMapper.toUserResponseDtoCollection(
                 userService.findUsers(ids, from, size));
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteUserById(@Min(1) @PathVariable Long userId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUserById(@PathVariable @Min(1) Long userId) {
         log.info("Delete by id={}", userId);
         userService.deleteUserById(userId);
     }
