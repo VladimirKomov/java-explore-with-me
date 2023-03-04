@@ -32,7 +32,7 @@ public class AdminUserController {
     public UserResponseDto create(@Valid @RequestBody UserRequestDto userRequestDto) {
         log.info("Create {}", userRequestDto.toString());
         return UserMapper.toUserResponseDto(
-                userService.createUser(UserMapper.toUser(userRequestDto)));
+                userService.create(UserMapper.toUser(userRequestDto)));
     }
 
     /**
@@ -49,11 +49,14 @@ public class AdminUserController {
                 userService.findUsers(ids, from, size));
     }
 
-    @DeleteMapping("/{userId}")
+    /**
+     * Удаление пользователя
+     */
+    @DeleteMapping("{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserById(@PathVariable @Min(1) Long userId) {
         log.info("Delete by id={}", userId);
-        userService.deleteUserById(userId);
+        userService.deleteById(userId);
     }
 
 }

@@ -25,7 +25,7 @@ public class ErrorHandler {
         log.info(HttpStatus.BAD_REQUEST + " {}", e.getMessage());
         return ErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.name())
-                .reason(String.valueOf(e.getCause()))
+                .reason("Incorrectly made request.")
                 .message(e.getLocalizedMessage())
                 .build();
     }
@@ -36,7 +36,7 @@ public class ErrorHandler {
         log.info(HttpStatus.CONFLICT + " {}", e.getMessage());
         return ErrorResponse.builder()
                 .status(HttpStatus.CONFLICT.name())
-                .reason(String.valueOf(e.getCause()))
+                .reason("Integrity constraint has been violated.")
                 .message(e.getLocalizedMessage())
                 .build();
     }

@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface UserService {
 
-    User createUser(User user);
+    User create(User user);
 
     Collection<User> findUsers(List<Long> ids, Integer from, Integer size);
 
-    void deleteUserById(Long userId);
+    void deleteById(Long userId);
 }
