@@ -30,6 +30,17 @@ public class ErrorHandler {
                 .build();
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse notFoundException(final NotFoundException e) {
+        log.info(HttpStatus.NOT_FOUND + " {}", e.getMessage());
+        return ErrorResponse.builder()
+                .status(HttpStatus.NOT_FOUND.name())
+                .reason("The required object was not found.")
+                .message(e.getLocalizedMessage())
+                .build();
+    }
+
     @ExceptionHandler({DataIntegrityViolationException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse notValidateException(final RuntimeException e) {
@@ -47,7 +58,7 @@ public class ErrorHandler {
         log.info(HttpStatus.INTERNAL_SERVER_ERROR + " {}", e.getMessage());
         return ErrorResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.name())
-                .reason(String.valueOf(e.getCause()))
+                .reason("Internet server error.")
                 .message(e.getLocalizedMessage())
                 .build();
     }

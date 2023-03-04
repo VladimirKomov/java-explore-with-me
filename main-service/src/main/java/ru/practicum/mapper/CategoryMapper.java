@@ -4,6 +4,9 @@ import ru.practicum.dto.category.CategoryRequestDto;
 import ru.practicum.dto.category.CategoryResponseDto;
 import ru.practicum.entity.Category;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 public class CategoryMapper {
 
     public static Category toCategory(CategoryRequestDto dto) {
@@ -17,5 +20,11 @@ public class CategoryMapper {
                 .id(category.getId())
                 .name(category.getName())
                 .build();
+    }
+
+    public static Collection<CategoryResponseDto> toCategoryResponseDtoCollection(Collection<Category> categories) {
+        return categories.stream()
+                .map(CategoryMapper::toCategoryResponseDto)
+                .collect(Collectors.toList());
     }
 }
