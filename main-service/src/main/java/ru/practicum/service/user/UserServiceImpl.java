@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.entity.User;
+import ru.practicum.exception.NotFoundException;
 import ru.practicum.repository.UserRepository;
 
 import java.util.Collection;
@@ -26,6 +27,11 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public Collection<User> findUsers(List<Long> ids, Integer from, Integer size) {
         return userRepository.findByIdIn(ids, PageRequest.of(from, size));
+    }
+
+    @Override
+    public User findByid(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with id=" + userId));
     }
 
     @Override

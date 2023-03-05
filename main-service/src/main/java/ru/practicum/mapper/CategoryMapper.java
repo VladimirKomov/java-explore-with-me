@@ -1,6 +1,6 @@
 package ru.practicum.mapper;
 
-import ru.practicum.dto.category.CategoryRequestDto;
+import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.dto.category.CategoryResponseDto;
 import ru.practicum.entity.Category;
 
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class CategoryMapper {
 
-    public static Category toCategory(CategoryRequestDto dto) {
+    public static Category toCategory(NewCategoryDto dto) {
         return Category.builder()
                 .name(dto.getName())
                 .build();

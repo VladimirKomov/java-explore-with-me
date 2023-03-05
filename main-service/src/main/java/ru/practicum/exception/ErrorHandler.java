@@ -12,6 +12,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
+import java.util.List;
 
 @RestControllerAdvice
 @Slf4j
@@ -21,10 +22,11 @@ public class ErrorHandler {
             MethodArgumentTypeMismatchException.class, ValidationException.class,
             MissingServletRequestParameterException.class, ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse badRequestException(final RuntimeException e) {
+    public ApiError badRequestException(final RuntimeException e) {
         log.info(HttpStatus.BAD_REQUEST + " {}", e.getMessage());
-        return ErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST.name())
+        return ApiError.builder()
+                .errors(List.of(e.getClass().getName()))
+                .status(HttpStatus.BAD_REQUEST)
                 .reason("Incorrectly made request.")
                 .message(e.getLocalizedMessage())
                 .build();
@@ -32,10 +34,11 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse notFoundException(final NotFoundException e) {
+    public ApiError notFoundException(final NotFoundException e) {
         log.info(HttpStatus.NOT_FOUND + " {}", e.getMessage());
-        return ErrorResponse.builder()
-                .status(HttpStatus.NOT_FOUND.name())
+        return ApiError.builder()
+                .errors(List.of(e.getClass().getName()))
+                .status(HttpStatus.NOT_FOUND)
                 .reason("The required object was not found.")
                 .message(e.getLocalizedMessage())
                 .build();
@@ -43,10 +46,11 @@ public class ErrorHandler {
 
     @ExceptionHandler({DataIntegrityViolationException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse notValidateException(final RuntimeException e) {
+    public ApiError notValidateException(final RuntimeException e) {
         log.info(HttpStatus.CONFLICT + " {}", e.getMessage());
-        return ErrorResponse.builder()
-                .status(HttpStatus.CONFLICT.name())
+        return ApiError.builder()
+                .errors(List.of(e.getClass().getName()))
+                .status(HttpStatus.CONFLICT)
                 .reason("Integrity constraint has been violated.")
                 .message(e.getLocalizedMessage())
                 .build();
@@ -54,10 +58,11 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse throwable(final Throwable e) {
+    public ApiError throwable(final Throwable e) {
         log.info(HttpStatus.INTERNAL_SERVER_ERROR + " {}", e.getMessage());
-        return ErrorResponse.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.name())
+        return ApiError.builder()
+                .errors(List.of(e.getClass().getName()))
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .reason("Internet server error.")
                 .message(e.getLocalizedMessage())
                 .build();

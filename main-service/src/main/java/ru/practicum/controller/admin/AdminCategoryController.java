@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.category.CategoryRequestDto;
+import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.dto.category.CategoryResponseDto;
 import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.service.category.CategoryService;
@@ -27,10 +27,10 @@ public class AdminCategoryController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryResponseDto create(@Valid @RequestBody CategoryRequestDto categoryRequestDto) {
-        log.info("Create {}", categoryRequestDto.toString());
+    public CategoryResponseDto create(@Valid @RequestBody NewCategoryDto newCategoryDto) {
+        log.info("Create {}", newCategoryDto.toString());
         return CategoryMapper.toCategoryResponseDto(
-                categoryService.create(CategoryMapper.toCategory(categoryRequestDto)));
+                categoryService.create(CategoryMapper.toCategory(newCategoryDto)));
     }
 
     /**
@@ -48,10 +48,10 @@ public class AdminCategoryController {
      */
     @PatchMapping("{catId}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryResponseDto update(@Valid @RequestBody CategoryRequestDto categoryRequestDto,
+    public CategoryResponseDto update(@Valid @RequestBody NewCategoryDto newCategoryDto,
                                       @PathVariable @Min(1) Long catId) {
-        log.info("Update by id={}, for {}", catId, categoryRequestDto.toString());
+        log.info("Update by id={}, for {}", catId, newCategoryDto.toString());
         return CategoryMapper.toCategoryResponseDto(
-                categoryService.update(catId, CategoryMapper.toCategory(categoryRequestDto)));
+                categoryService.update(catId, CategoryMapper.toCategory(newCategoryDto)));
     }
 }

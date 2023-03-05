@@ -7,9 +7,11 @@ import ru.practicum.entity.Category;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.repository.CategoryRepository;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
