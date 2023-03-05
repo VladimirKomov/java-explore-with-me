@@ -28,6 +28,8 @@ public class PrivateEventController {
 
     private final EventService eventService;
 
+    //сначало делаем все контроллеры и валидацию
+
     /**
      * Добавление нового события
      */
