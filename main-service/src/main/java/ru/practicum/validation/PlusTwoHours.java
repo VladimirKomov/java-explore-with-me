@@ -25,6 +25,7 @@ public @interface PlusTwoHours {
 
         @Override
         public boolean isValid(Timestamp timestamp, ConstraintValidatorContext context) {
+            if (timestamp == null) return true;
             return timestamp.after(startTime);
         }
     }

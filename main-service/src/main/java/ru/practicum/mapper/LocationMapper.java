@@ -7,6 +7,7 @@ import ru.practicum.entity.Location;
 public class LocationMapper {
 
     public static Location toLocation(LocationRequestDto dto) {
+        if (dto == null) return  null;
         return Location.builder()
                 .lat(dto.getLat())
                 .lon(dto.getLon())

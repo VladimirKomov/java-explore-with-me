@@ -17,27 +17,23 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewEventDto {
+public class UpdateEventUserRequest {
 
     @Size(max = 2000, min = 20)
-    @NotBlank
     private String annotation;
-    @NotNull
+
     private Long category;
     @Size(max = 7000, min = 20)
-    @NotBlank
     private String description;
-    @NotNull
     @PlusTwoHours(message = "Invalid date: cannot be less than two hours from now")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp eventDate;
-    @NotNull
+
     private LocationRequestDto location;
-    @Builder.Default
-    private boolean paid = false;
-    private int participantLimit;
-    private boolean requestModeration;
+    private Boolean paid ;
+    private Integer participantLimit;
+    private Boolean requestModeration;
+    private String stateAction;
     @Size(max = 120, min = 3)
-    @NotBlank
     private String title;
 }

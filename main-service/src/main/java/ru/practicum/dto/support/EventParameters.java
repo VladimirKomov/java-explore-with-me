@@ -7,6 +7,8 @@ import ru.practicum.entity.Location;
 @Data
 @Builder
 public class EventParameters {
+
+    private Long eventId;
     private Long userId;
     private Long categoryId;
     private Location location;
