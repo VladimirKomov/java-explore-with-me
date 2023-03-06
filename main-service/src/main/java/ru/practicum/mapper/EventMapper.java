@@ -4,7 +4,9 @@ import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventUserRequest;
+import ru.practicum.entity.Category;
 import ru.practicum.entity.Event;
+import ru.practicum.entity.Location;
 import ru.practicum.entity.State;
 
 import java.util.Collection;
@@ -15,12 +17,13 @@ public class EventMapper {
     public static Event toEvent(NewEventDto dto) {
         return Event.builder()
                 .annotation(dto.getAnnotation())
-                //+.category()
+                .category(Category.builder().id(dto.getCategory()).build())
+                //.confirmedRequests()
                 //-.createdOn()
                 .description(dto.getDescription())
                 .eventDate(dto.getEventDate())
-                //+.initiator()
-                //?.location()
+                //.initiator(User.builder().id(dto.get).build())
+                .location(Location.builder().lat(dto.getLocation().getLat()).lon(dto.getLocation().getLon()).build())
                 .paid(dto.isPaid())
                 .participantLimit(dto.getParticipantLimit())
                 //- .publishedOn()
@@ -31,23 +34,36 @@ public class EventMapper {
                 .build();
     }
 
+    //объеденить в один
     public static Event toEvent(UpdateEventUserRequest dto) {
-        return Event.builder()
-                .annotation(dto.getAnnotation())
-                //+.category()
-                //-.createdOn()
-                .description(dto.getDescription())
-                .eventDate(dto.getEventDate())
-                //+.initiator()
-                //?.location()
-                .paid(dto.getPaid())
-                .participantLimit(dto.getParticipantLimit())
-                //- .publishedOn()
-                .requestModeration(dto.getRequestModeration())
-                .state(findState(dto.getStateAction()))
-                .title(dto.getTitle())
-                //views()
-                .build();
+        Event event = new Event();
+        if (dto.getAnnotation() != null) event.setLocation(LocationMapper.toLocation(dto.getLocation()));
+        if (dto.getCategory() != null) event.setCategory(Category.builder().id(dto.getCategory()).build());
+        if (dto.getDescription() != null) event.setDescription(dto.getDescription());
+        if (dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
+        if (dto.getLocation() != null) event.setLocation(LocationMapper.toLocation(dto.getLocation()));
+        if (dto.getPaid() != null) event.setPaid(dto.getPaid());
+        if (dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
+        if (dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
+        if (dto.getStateAction() != null) event.setState(findState(dto.getStateAction()));
+        if (dto.getTitle() != null) event.setTitle(dto.getTitle());
+        return event;
+//        return Event.builder()
+//                .annotation(dto.getAnnotation())
+//                .category(Category.builder().id(dto.getCategory()).build())
+//                //-.createdOn()
+//                .description(dto.getDescription())
+//                .eventDate(dto.getEventDate())
+//                //+.initiator()
+//                .location(Location.builder().lat(dto.getLocation().getLat()).lon(dto.getLocation().getLon()).build())
+//                .paid(dto.getPaid())
+//                .participantLimit(dto.getParticipantLimit())
+//                //- .publishedOn()
+//                .requestModeration(dto.getRequestModeration())
+//                .state(findState(dto.getStateAction()))
+//                .title(dto.getTitle())
+//                //views()
+//                .build();
     }
 
     public static EventFullDto toEventFullDto(Event event) {
@@ -77,18 +93,12 @@ public class EventMapper {
         if (donor.getDescription() != null) recipient.setDescription(donor.getDescription());
         if (donor.getEventDate() != null) recipient.setEventDate(donor.getEventDate());
         if (donor.getLocation() != null) recipient.setLocation(donor.getLocation());
-        if (donor.getPaid() != null) recipient.setLocation(donor.getLocation());
+        if (donor.getPaid() != null) recipient.setPaid(donor.getPaid());
         if (donor.getParticipantLimit() != null) recipient.setParticipantLimit(donor.getParticipantLimit());
         if (donor.getRequestModeration() != null) recipient.setRequestModeration(donor.getRequestModeration());
         if (donor.getState() != null) recipient.setState(donor.getState());
         if (donor.getTitle() != null) recipient.setTitle(donor.getTitle());
         return recipient;
-    }
-
-    public static Collection<EventShortDto> toEventShortDtoCollection(Collection<Event> events) {
-        return events.stream()
-                .map(EventMapper::toEventShortDto)
-                .collect(Collectors.toList());
     }
 
     public static EventShortDto toEventShortDto(Event event) {
@@ -103,6 +113,34 @@ public class EventMapper {
                 .views(event.getViews())
                 .build();
     }
+
+    public static Collection<EventShortDto> toEventShortDtoCollection(Collection<Event> events) {
+        return events.stream()
+                .map(EventMapper::toEventShortDto)
+                .collect(Collectors.toList());
+    }
+
+    public static Collection<EventFullDto> toEventFullDtoCollection(Collection<Event> events) {
+        return events.stream()
+                .map(EventMapper::toEventFullDto)
+                .collect(Collectors.toList());
+    }
+
+//    private static Event updateFields(Event event, Object donor){
+//        if (donor.getClass()==Event.class) {
+//            donor = new Event(donor);
+//            if (donor.getAnnotation() != null) recipient.setLocation(donor.getLocation());
+//            if (donor.getCategory() != null) recipient.setCategory(donor.getCategory());
+//            if (donor.getDescription() != null) recipient.setDescription(donor.getDescription());
+//            if (donor.getEventDate() != null) recipient.setEventDate(donor.getEventDate());
+//            if (donor.getLocation() != null) recipient.setLocation(donor.getLocation());
+//            if (donor.getPaid() != null) recipient.setPaid(donor.getPaid());
+//            if (donor.getParticipantLimit() != null) recipient.setParticipantLimit(donor.getParticipantLimit());
+//            if (donor.getRequestModeration() != null) recipient.setRequestModeration(donor.getRequestModeration());
+//            if (donor.getState() != null) recipient.setState(donor.getState());
+//            if (donor.getTitle() != null) recipient.setTitle(donor.getTitle());
+//        }
+//    }
 
     private static State findState(String str) {
         if (str == null) return null;

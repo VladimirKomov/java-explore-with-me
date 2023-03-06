@@ -22,7 +22,6 @@ public class Event {
     private Category category;
     @Column(nullable = false)
     private Long confirmedRequests;
-//    private Long confirmedRequests;
     @Column(nullable = false)
     private Timestamp createdOn;
     @Column(nullable = false)

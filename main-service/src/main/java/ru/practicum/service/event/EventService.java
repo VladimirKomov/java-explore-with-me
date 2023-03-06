@@ -1,13 +1,20 @@
 package ru.practicum.service.event;
 
-import ru.practicum.dto.support.EventParameters;
 import ru.practicum.entity.Event;
 
+import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 public interface EventService {
 
-    Event create(EventParameters parameters, Event event);
-    Event update(EventParameters parameters, Event donor);
+    Event create(Long userId, Event event);
+
+    Event update(Long userId, Long eventId, Event donor);
+
     Collection<Event> getAll(Long userId, int from, int size);
+
+    Collection<Event> getAllByParameters(List<Long> users, List<String> states, List<Long> categories,
+                                         Timestamp rangeStart, Timestamp rangeEnd, int from, int size);
+
 }

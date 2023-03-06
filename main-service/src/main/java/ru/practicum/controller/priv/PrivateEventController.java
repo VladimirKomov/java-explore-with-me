@@ -38,13 +38,8 @@ public class PrivateEventController {
     public EventFullDto create(@PathVariable @Min(1) Long userId,
                                @RequestBody @Valid NewEventDto dto) {
         log.info("Create {}", dto.toString());
-        EventParameters parameters = EventParameters.builder()
-                .userId(userId)
-                .categoryId(dto.getCategory())
-                .location(LocationMapper.toLocation(dto.getLocation()))
-                .build();
         return EventMapper.toEventFullDto(
-                eventService.create(parameters, EventMapper.toEvent(dto)));
+                eventService.create(userId, EventMapper.toEvent(dto)));
     }
 
     /**
@@ -55,14 +50,8 @@ public class PrivateEventController {
                                     @PathVariable @Min(1) Long eventId,
                                     @Valid @RequestBody UpdateEventUserRequest dto) {
         log.info("Update by userId ={} and eventId={}, for {}", userId, eventId, dto.toString());
-        EventParameters parameters = EventParameters.builder()
-                .eventId(eventId)
-                .userId(userId)
-                .categoryId(dto.getCategory())
-                .location(LocationMapper.toLocation(dto.getLocation()))
-                .build();
         return EventMapper.toEventFullDto(
-                eventService.update(parameters, EventMapper.toEvent(dto)));
+                eventService.update(userId, eventId, EventMapper.toEvent(dto)));
     }
 
     /**

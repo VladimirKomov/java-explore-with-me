@@ -3,7 +3,6 @@ package ru.practicum.service.event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.dto.support.EventParameters;
 import ru.practicum.entity.*;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.EventMapper;
@@ -16,6 +15,7 @@ import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @Transactional
@@ -28,10 +28,10 @@ public class EventServiceImpl implements EventService {
     private final CategoryService categoryService;
 
     @Override
-    public Event create(EventParameters parameters, Event event) {
-        User user = userService.findByid(parameters.getUserId());
-        Location location = getLocation(parameters.getLocation());
-        Category category = categoryService.findById(parameters.getCategoryId());
+    public Event create(Long userId, Event event) {
+        User user = userService.findByid(userId);
+        Location location = getLocation(event.getLocation());
+        Category category = categoryService.findById(event.getCategory().getId());
         event.setInitiator(user);
         event.setConfirmedRequests(0L);
         event.setLocation(location);
@@ -45,14 +45,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event update(EventParameters parameters, Event donor) {
-        userService.findByid(parameters.getUserId());
-        if (parameters.getLocation() != null) {
-            Location location = getLocation(parameters.getLocation());
+    public Event update(Long userId, Long eventId, Event donor) {
+        userService.findByid(userId);
+        if (donor.getLocation() != null) {
+            Location location = getLocation(donor.getLocation());
             donor.setLocation(location);
         }
-        Event recipient = eventRepository.findById(parameters.getEventId()).orElseThrow(
-                () -> new NotFoundException("Event with id=" + parameters.getEventId()));
+        Event recipient = eventRepository.findById(eventId).orElseThrow(
+                () -> new NotFoundException("Event with id=" + eventId));
         recipient = EventMapper.updateEvent(donor, recipient);
         return eventRepository.save(recipient);
     }
@@ -60,6 +60,15 @@ public class EventServiceImpl implements EventService {
     @Override
     public Collection<Event> getAll(Long userId, int from, int size) {
         return eventRepository.findAllByInitiatorId(userId, PageRequest.of(from, size));
+    }
+
+    @Override
+    public Collection<Event> getAllByParameters(List<Long> users, List<String> states, List<Long> categories,
+                                                Timestamp rangeStart, Timestamp rangeEnd, int from, int size) {
+        if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.MAX);
+        if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.MIN);
+        return eventRepository.findByParameters(users, states, categories,
+                rangeStart, rangeEnd, PageRequest.of(from, size));
     }
 
     private Location getLocation(Location location) {
