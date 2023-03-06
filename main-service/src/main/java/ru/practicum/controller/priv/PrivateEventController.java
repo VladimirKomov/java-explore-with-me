@@ -58,9 +58,9 @@ public class PrivateEventController {
      * Получение событий, добавленных текущим пользователем
      */
     @GetMapping
-    public Collection<EventShortDto> getAll(@Positive @PathVariable Long userId,
-                                            @RequestParam(defaultValue = "0") @Min(0) final int from,
-                                            @RequestParam(defaultValue = "10") @Min(1) final int size) {
+    public Collection<EventShortDto> getAll(@PathVariable @Min(1) Long userId,
+                                            @RequestParam(defaultValue = "0") @Min(0) int from,
+                                            @RequestParam(defaultValue = "10") @Min(1) int size) {
         log.info("GET Events by userId={}, from={}, size={}", userId, from, size);
         return EventMapper.toEventShortDtoCollection(
                 eventService.getAll(userId, from, size));

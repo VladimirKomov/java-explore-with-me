@@ -103,6 +103,7 @@ public class EventMapper {
 
     public static EventShortDto toEventShortDto(Event event) {
         return EventShortDto.builder()
+                .id(event.getId())
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryResponseDto(event.getCategory()))
                 .confirmedRequests(event.getConfirmedRequests())
@@ -115,9 +116,10 @@ public class EventMapper {
     }
 
     public static Collection<EventShortDto> toEventShortDtoCollection(Collection<Event> events) {
-        return events.stream()
+         return events.stream()
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
+         //return eventShortDtos;
     }
 
     public static Collection<EventFullDto> toEventFullDtoCollection(Collection<Event> events) {

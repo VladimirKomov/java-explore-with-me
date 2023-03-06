@@ -2,6 +2,7 @@ package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import ru.practicum.dto.category.CategoryResponseDto;
 import ru.practicum.dto.user.UserShortDto;
@@ -13,6 +14,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Builder
+@AllArgsConstructor
+@NotNull
 public class EventShortDto {
 
     public Long id;

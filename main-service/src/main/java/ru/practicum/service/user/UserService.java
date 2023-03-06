@@ -10,7 +10,7 @@ public interface UserService {
     User create(User user);
 
     Collection<User> findUsers(List<Long> ids, Integer from, Integer size);
-    User findByid(Long userId);
+    User findById(Long userId);
 
     void deleteById(Long userId);
 }

@@ -29,7 +29,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event create(Long userId, Event event) {
-        User user = userService.findByid(userId);
+        User user = userService.findById(userId);
         Location location = getLocation(event.getLocation());
         Category category = categoryService.findById(event.getCategory().getId());
         event.setInitiator(user);
@@ -46,7 +46,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event update(Long userId, Long eventId, Event donor) {
-        userService.findByid(userId);
+        userService.findById(userId);
         if (donor.getLocation() != null) {
             Location location = getLocation(donor.getLocation());
             donor.setLocation(location);
@@ -69,6 +69,16 @@ public class EventServiceImpl implements EventService {
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.MIN);
         return eventRepository.findByParameters(users, states, categories,
                 rangeStart, rangeEnd, PageRequest.of(from, size));
+    }
+
+    @Override
+    public Collection<Event> getAllByParametersPublic(String text, List<Long> categories, Boolean paid,
+                                                      Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable,
+                                                      SortEvent sort, int from, int size) {
+        if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.MAX);
+        if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.MIN);
+        return eventRepository.findByParametersForPublic(text, categories, paid,
+                rangeStart, rangeEnd, onlyAvailable, PageRequest.of(from, size));
     }
 
     private Location getLocation(Location location) {
