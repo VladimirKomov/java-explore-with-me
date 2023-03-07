@@ -12,7 +12,7 @@ import ru.practicum.dto.user.UserShortDto;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import static ru.practicum.dto.support.Constants.DATE_TIME;
+import static ru.practicum.util.Constants.DATE_TIME;
 
 @Data
 @Builder
@@ -23,7 +23,7 @@ public class EventFullDto {
     LocationResponseDto location;
     private String annotation;
     private CategoryResponseDto category;
-    private Long confirmedRequests;
+    private Integer confirmedRequests;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME)
     private LocalDateTime createdOn;
     private String description;

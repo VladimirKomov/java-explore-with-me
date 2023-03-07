@@ -3,11 +3,8 @@ package ru.practicum.controller.pub;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.StatsClient;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.entity.SortEvent;
 import ru.practicum.mapper.EventMapper;
@@ -18,7 +15,6 @@ import javax.validation.constraints.Min;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Validated
 @RestController
@@ -28,7 +24,6 @@ import java.util.stream.Collectors;
 public class PublicEventController {
 
     private final EventService eventService;
-
     //private final StatsClient statsClient;
 
     /**
@@ -52,6 +47,17 @@ public class PublicEventController {
         return EventMapper.toEventShortDtoCollection(
                 eventService.getAllByParametersPublic(text, categories, paid, rangeStart,
                         rangeEnd, onlyAvailable, sort, from, size));
+    }
+
+    /**
+     * Получение информации о категории по её идентификатору
+     */
+    @GetMapping("{id}")
+    public EventFullDto getById(
+            @PathVariable @Min(1) long id) {
+        log.info("GET event by id={}", id);
+        return EventMapper.toEventFullDto(
+                eventService.getById(id));
     }
 
 

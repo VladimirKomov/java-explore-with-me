@@ -8,7 +8,7 @@ import ru.practicum.entity.Status;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-import static ru.practicum.dto.support.Constants.DATE_TIME;
+import static ru.practicum.util.Constants.DATE_TIME;
 
 @Data
 @Builder

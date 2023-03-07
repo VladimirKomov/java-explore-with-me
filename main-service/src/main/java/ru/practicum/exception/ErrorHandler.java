@@ -44,7 +44,7 @@ public class ErrorHandler {
                 .build();
     }
 
-    @ExceptionHandler({DataIntegrityViolationException.class})
+    @ExceptionHandler({DataIntegrityViolationException.class, AccessException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError notValidateException(final RuntimeException e) {
         log.info(HttpStatus.CONFLICT + " {}", e.getMessage());

@@ -24,18 +24,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Collection<User> findUsers(List<Long> ids, Integer from, Integer size) {
+    public Collection<User> getUsers(List<Long> ids, int from, int size) {
         return userRepository.findByIdIn(ids, PageRequest.of(from, size));
     }
 
     @Override
-    public User findById(Long userId) {
+    public User getById(long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with id=" + userId));
     }
 
     @Override
-    public void deleteById(Long userId) {
+    public void deleteById(long userId) {
         userRepository.deleteById(userId);
     }
 }

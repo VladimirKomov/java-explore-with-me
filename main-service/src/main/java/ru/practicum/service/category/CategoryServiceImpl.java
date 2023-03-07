@@ -23,24 +23,24 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteById(Long catId) {
+    public void deleteById(long catId) {
         categoryRepository.deleteById(catId);
     }
 
     @Override
-    public Category update(Long catId, Category category) {
+    public Category update(long catId, Category category) {
         category.setId(catId);
         return categoryRepository.save(category);
     }
 
     @Override
-    public Collection<Category> findCategories(Integer from, Integer size) {
+    public Collection<Category> findCategories(int from, int size) {
         return categoryRepository.findAll(PageRequest.of(from, size))
                 .toList();
     }
 
     @Override
-    public Category findById(Long id) {
+    public Category findById(long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category with id=" + id));
     }
 }

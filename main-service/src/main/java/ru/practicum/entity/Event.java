@@ -21,7 +21,7 @@ public class Event {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
     @Column(nullable = false)
-    private Long confirmedRequests;
+    private Integer confirmedRequests;
     @Column(nullable = false)
     private Timestamp createdOn;
     @Column(nullable = false)
@@ -47,6 +47,6 @@ public class Event {
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
-    private Long views;
+    private Integer views;
 
 }

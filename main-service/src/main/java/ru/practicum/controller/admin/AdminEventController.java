@@ -3,15 +3,14 @@ package ru.practicum.controller.admin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.service.event.EventService;
+import ru.practicum.util.UpdateEventAdminRequest;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
@@ -24,6 +23,16 @@ import java.util.List;
 public class AdminEventController {
 
     private final EventService eventService;
+
+    /**
+     * Редактирование данных события и его статуса (отклонение/публикация)
+     */
+    @PatchMapping("/{eventId}")
+    public EventFullDto update(@Positive @Min(1) long eventId,
+                               @RequestBody UpdateEventAdminRequest request) {
+        return EventMapper.toEventFullDto(eventService.updateByAdmin(eventId,
+                EventMapper.toEvent(request)));
+    }
 
     /**
      * Возвращает полную информацию обо всех событиях подходящих под переданные условия

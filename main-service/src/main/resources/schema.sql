@@ -58,10 +58,11 @@ CREATE TABLE requests
     created      TIMESTAMP WITHOUT TIME ZONE             NOT NULL,
     event_id     BIGINT                                  NOT NULL,
     requester_id BIGINT                                  NOT NULL,
-    status       VARCHAR(255)                            NOT NULL,
+    status       VARCHAR(10)                            NOT NULL,
     CONSTRAINT pk_requests PRIMARY KEY (id),
     CONSTRAINT FK_REQUESTS_ON_EVENT FOREIGN KEY (event_id) REFERENCES events (id),
-    CONSTRAINT FK_REQUESTS_ON_REQUESTER FOREIGN KEY (requester_id) REFERENCES users (id)
+    CONSTRAINT FK_REQUESTS_ON_REQUESTER FOREIGN KEY (requester_id) REFERENCES users (id),
+    CONSTRAINT uc_requests_name UNIQUE (requester_id, event_id)
 );
 
 CREATE TABLE compilations

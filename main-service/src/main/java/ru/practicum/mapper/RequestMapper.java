@@ -1,6 +1,8 @@
 package ru.practicum.mapper;
 
+import ru.practicum.dto.request.EventRequestStatusUpdateResultDto;
 import ru.practicum.dto.request.ParticipationRequestDto;
+import ru.practicum.util.EventRequestStatusUpdateResult;
 import ru.practicum.entity.Request;
 
 import java.util.Collection;
@@ -19,9 +21,22 @@ public class RequestMapper {
                 .build();
     }
 
-    public static Collection<ParticipationRequestDto> toParticipationRequestDtoCollection(Collection<Request> requests){
+    public static Collection<ParticipationRequestDto> toParticipationRequestDtoCollection(
+            Collection<Request> requests) {
         return requests.stream()
                 .map(RequestMapper::toParticipationRequestDto)
                 .collect(Collectors.toList());
+    }
+
+    public static EventRequestStatusUpdateResultDto toEventRequestStatusUpdateResultDto(
+            EventRequestStatusUpdateResult result) {
+        return EventRequestStatusUpdateResultDto.builder()
+                .confirmedRequests(result.getConfirmedRequests().stream()
+                        .map(RequestMapper::toParticipationRequestDto)
+                        .collect(Collectors.toList()))
+                .rejectedRequests(result.getRejectedRequests().stream()
+                        .map(RequestMapper::toParticipationRequestDto)
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

@@ -42,11 +42,11 @@ public class AdminUserController {
     @GetMapping
     public Collection<UserResponseDto> getUsersByParameters(
             @RequestParam(required = false) List<Long> ids,
-            @RequestParam(defaultValue = "0") @Min(0) Integer from,
-            @RequestParam(defaultValue = "10") @Min(1) Integer size) {
+            @RequestParam(defaultValue = "0") @Min(0) int from,
+            @RequestParam(defaultValue = "10") @Min(1) int size) {
         log.info("GET users ids={}, from={}, size={}", ids, from, size);
         return UserMapper.toUserResponseDtoCollection(
-                userService.findUsers(ids, from, size));
+                userService.getUsers(ids, from, size));
     }
 
     /**
@@ -54,7 +54,7 @@ public class AdminUserController {
      */
     @DeleteMapping("{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserById(@PathVariable @Min(1) Long userId) {
+    public void deleteUserById(@PathVariable @Min(1) long userId) {
         log.info("Delete by id={}", userId);
         userService.deleteById(userId);
     }

@@ -28,37 +28,32 @@ public class EventServiceImpl implements EventService {
     private final CategoryService categoryService;
 
     @Override
-    public Event create(Long userId, Event event) {
-        User user = userService.findById(userId);
+    public Event create(long userId, Event event) {
+        User user = userService.getById(userId);
         Location location = getLocation(event.getLocation());
         Category category = categoryService.findById(event.getCategory().getId());
         event.setInitiator(user);
-        event.setConfirmedRequests(0L);
+        event.setConfirmedRequests(0);
         event.setLocation(location);
         event.setCategory(category);
         event.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
         event.setPublishedOn(Timestamp.valueOf(LocalDateTime.now()));
         event.setState(State.PENDING);
-        event.setViews(0L);
+        event.setViews(0);
 
         return eventRepository.save(event);
     }
 
     @Override
-    public Event update(Long userId, Long eventId, Event donor) {
-        userService.findById(userId);
-        if (donor.getLocation() != null) {
-            Location location = getLocation(donor.getLocation());
-            donor.setLocation(location);
-        }
-        Event recipient = eventRepository.findById(eventId).orElseThrow(
-                () -> new NotFoundException("Event with id=" + eventId));
-        recipient = EventMapper.updateEvent(donor, recipient);
+    public Event update(long userId, long eventId, Event donor) {
+        Event recipient = getUserEventById(eventId, userId);
+        recipient = updateEvent(donor, recipient);
         return eventRepository.save(recipient);
     }
 
     @Override
-    public Collection<Event> getAll(Long userId, int from, int size) {
+    public Collection<Event> getAll(long userId, int from, int size) {
+        userService.getById(userId);
         return eventRepository.findAllByInitiatorId(userId, PageRequest.of(from, size));
     }
 
@@ -79,6 +74,35 @@ public class EventServiceImpl implements EventService {
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.MIN);
         return eventRepository.findByParametersForPublic(text, categories, paid,
                 rangeStart, rangeEnd, onlyAvailable, PageRequest.of(from, size));
+    }
+
+    //+++ошибка, нужен эвент пользователя, а не любой
+    @Override
+    public Event getUserEventById(long eventId, long userId) {
+        userService.getById(userId);
+        return eventRepository.findById(eventId).orElseThrow(
+                () -> new NotFoundException("Event with id=" + eventId));
+    }
+
+    @Override
+    public Event getById(long eventId) {
+        return eventRepository.findById(eventId).orElseThrow(
+                () -> new NotFoundException("Event with id=" + eventId));
+    }
+
+    @Override
+    public Event updateByAdmin(long eventId, Event donor) {
+        Event recipient = getById(eventId);
+        recipient = updateEvent(donor, recipient);
+        return eventRepository.save(recipient);
+    }
+
+    private Event updateEvent(Event donor, Event recipient) {
+        if (donor.getLocation() != null) {
+            Location location = getLocation(donor.getLocation());
+            donor.setLocation(location);
+        }
+        return EventMapper.updateEvent(donor, recipient);
     }
 
     private Location getLocation(Location location) {

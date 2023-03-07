@@ -9,8 +9,8 @@ public interface UserService {
 
     User create(User user);
 
-    Collection<User> findUsers(List<Long> ids, Integer from, Integer size);
-    User findById(Long userId);
+    Collection<User> getUsers(List<Long> ids, int from, int size);
+    User getById(long userId);
 
-    void deleteById(Long userId);
+    void deleteById(long userId);
 }

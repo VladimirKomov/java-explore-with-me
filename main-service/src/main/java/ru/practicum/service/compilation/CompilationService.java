@@ -11,4 +11,8 @@ public interface CompilationService {
     Compilation create(Compilation toCompilation);
 
     Compilation update(long compId, Compilation compilation);
+
+    void delete(long compId);
+
+    Compilation getById(long compId);
 }

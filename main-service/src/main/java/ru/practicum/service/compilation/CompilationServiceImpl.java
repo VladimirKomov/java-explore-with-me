@@ -32,7 +32,13 @@ public class CompilationServiceImpl implements CompilationService{
         return compilationRepository.save(CompilationMapper.update(recipient, compilation));
     }
 
-    private Compilation getById(long compId) {
+    @Override
+    public void delete(long compId) {
+        compilationRepository.deleteById(compId);
+    }
+
+    @Override
+    public Compilation getById(long compId) {
         return compilationRepository.findById(compId).orElseThrow(
                 () -> new NotFoundException("Collection with id=" + compId));
     }

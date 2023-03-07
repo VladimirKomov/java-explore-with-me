@@ -25,9 +25,9 @@ public class PublicCategoryController {
      * Получение категорий
      */
     @GetMapping
-    public Collection<CategoryResponseDto> findCategories(
-            @RequestParam(defaultValue = "0") @Min(0) Integer from,
-            @RequestParam(defaultValue = "10") @Min(1) Integer size) {
+    public Collection<CategoryResponseDto> getAll(
+            @RequestParam(defaultValue = "0") @Min(0) int from,
+            @RequestParam(defaultValue = "10") @Min(1) int size) {
         log.info("GET categories by from={}, size={}", from, size);
         return CategoryMapper.toCategoryResponseDtoCollection(
                 categoryService.findCategories(from, size));
@@ -37,9 +37,9 @@ public class PublicCategoryController {
      * Получение информации о категории по её идентификатору
      */
     @GetMapping("{catId}")
-    public CategoryResponseDto findCategories(
-            @PathVariable @Min(1) Long catId) {
-        log.info("GET category by id={}, size={}", catId);
+    public CategoryResponseDto getById(
+            @PathVariable @Min(1) long catId) {
+        log.info("GET category by id={}", catId);
         return CategoryMapper.toCategoryResponseDto(
                 categoryService.findById(catId));
     }

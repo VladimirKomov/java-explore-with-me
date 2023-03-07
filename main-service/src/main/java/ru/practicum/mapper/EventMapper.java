@@ -8,6 +8,7 @@ import ru.practicum.entity.Category;
 import ru.practicum.entity.Event;
 import ru.practicum.entity.Location;
 import ru.practicum.entity.State;
+import ru.practicum.util.UpdateEventAdminRequest;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -48,6 +49,8 @@ public class EventMapper {
         if (dto.getStateAction() != null) event.setState(findState(dto.getStateAction()));
         if (dto.getTitle() != null) event.setTitle(dto.getTitle());
         return event;
+
+
 //        return Event.builder()
 //                .annotation(dto.getAnnotation())
 //                .category(Category.builder().id(dto.getCategory()).build())
@@ -64,6 +67,20 @@ public class EventMapper {
 //                .title(dto.getTitle())
 //                //views()
 //                .build();
+    }
+
+    public static Event toEvent(UpdateEventAdminRequest dto) {
+        Event event = new Event();
+        if (dto.getAnnotation() != null) event.setLocation(LocationMapper.toLocation(dto.getLocation()));
+        if (dto.getCategory() != null) event.setCategory(Category.builder().id(dto.getCategory()).build());
+        if (dto.getDescription() != null) event.setDescription(dto.getDescription());
+        if (dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
+        if (dto.getLocation() != null) event.setLocation(LocationMapper.toLocation(dto.getLocation()));
+        if (dto.getPaid() != null) event.setPaid(dto.getPaid());
+        if (dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
+        if (dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
+        if (dto.getTitle() != null) event.setTitle(dto.getTitle());
+        return event;
     }
 
     public static EventFullDto toEventFullDto(Event event) {
