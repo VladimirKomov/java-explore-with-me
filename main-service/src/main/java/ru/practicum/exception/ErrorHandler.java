@@ -3,6 +3,7 @@ package ru.practicum.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,9 +19,10 @@ import java.util.List;
 @Slf4j
 public class ErrorHandler {
 
-    @ExceptionHandler({MethodArgumentNotValidException.class, ConstraintViolationException.class,
-            MethodArgumentTypeMismatchException.class, ValidationException.class,
-            MissingServletRequestParameterException.class, ConstraintViolationException.class})
+    @ExceptionHandler({MethodArgumentNotValidException.class,
+            MethodArgumentTypeMismatchException.class,
+            ValidationException.class,
+            MissingServletRequestParameterException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError badRequestException(final RuntimeException e) {
         log.info(HttpStatus.BAD_REQUEST + " {}", e.getMessage());
@@ -44,7 +46,9 @@ public class ErrorHandler {
                 .build();
     }
 
-    @ExceptionHandler({DataIntegrityViolationException.class, AccessException.class})
+    @ExceptionHandler({DataIntegrityViolationException.class, AccessException.class,
+            TransactionSystemException.class,
+            ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError notValidateException(final RuntimeException e) {
         log.info(HttpStatus.CONFLICT + " {}", e.getMessage());

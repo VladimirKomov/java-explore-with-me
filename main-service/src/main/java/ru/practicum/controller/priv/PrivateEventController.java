@@ -11,15 +11,14 @@ import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.dto.request.EventRequestStatusUpdateResultDto;
 import ru.practicum.dto.request.ParticipationRequestDto;
-import ru.practicum.util.EventRequestStatusUpdateRequest;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.mapper.RequestMapper;
 import ru.practicum.service.event.EventService;
 import ru.practicum.service.request.RequestService;
+import ru.practicum.util.EventRequestStatusUpdateRequest;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Positive;
 import java.util.Collection;
 
 @Validated
@@ -37,8 +36,9 @@ public class PrivateEventController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventFullDto create(@PathVariable @Min(1) long userId,
-                               @RequestBody @Valid NewEventDto dto) {
+    public EventFullDto create(
+            @PathVariable @Min(0) long userId,
+            @RequestBody @Valid NewEventDto dto) {
         log.info("Create {}", dto.toString());
         return EventMapper.toEventFullDto(
                 eventService.create(userId, EventMapper.toEvent(dto)));
@@ -48,9 +48,10 @@ public class PrivateEventController {
      * Изменение события добавленного текущим пользователем
      */
     @PatchMapping("{eventId}")
-    public EventFullDto updateEvent(@PathVariable @Min(1) long userId,
-                                    @PathVariable @Min(1) long eventId,
-                                    @Valid @RequestBody UpdateEventUserRequest dto) {
+    public EventFullDto updateEvent(
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long eventId,
+            @Valid @RequestBody UpdateEventUserRequest dto) {
         log.info("Update by userId ={} and eventId={}, for {}", userId, eventId, dto.toString());
         return EventMapper.toEventFullDto(
                 eventService.update(userId, eventId, EventMapper.toEvent(dto)));
@@ -60,9 +61,10 @@ public class PrivateEventController {
      * Изменение статуса (подтверждена, отменена) заявок на участие в событии текущего пользователя
      */
     @PatchMapping("{eventId}/requests")
-    public EventRequestStatusUpdateResultDto updateEvent(@PathVariable @Min(1) long userId,
-                                                         @PathVariable @Min(1) long eventId,
-                                                         @Valid @RequestBody EventRequestStatusUpdateRequest requestStatusUpdate) {
+    public EventRequestStatusUpdateResultDto updateEvent(
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long eventId,
+            @Valid @RequestBody EventRequestStatusUpdateRequest requestStatusUpdate) {
         log.info("Update requests by userId ={}, eventId={}, for {}", userId, eventId, requestStatusUpdate.toString());
         return RequestMapper.toEventRequestStatusUpdateResultDto(
                 requestService.updateStatus(userId, eventId, requestStatusUpdate));
@@ -73,20 +75,22 @@ public class PrivateEventController {
      * Получение событий, добавленных текущим пользователем
      */
     @GetMapping
-    public Collection<EventShortDto> getAll(@PathVariable @Min(1) Long userId,
-                                            @RequestParam(defaultValue = "0") @Min(0) int from,
-                                            @RequestParam(defaultValue = "10") @Min(1) int size) {
+    public Collection<EventShortDto> getAll(
+            @PathVariable @Min(0) Long userId,
+            @RequestParam(defaultValue = "0") @Min(0) int from,
+            @RequestParam(defaultValue = "10") @Min(1) int size) {
         log.info("GET Events by userId={}, from={}, size={}", userId, from, size);
         return EventMapper.toEventShortDtoCollection(
                 eventService.getAll(userId, from, size));
-
     }
 
     /**
      * Получение полной информации о событии добавленном текущим пользователем
      */
     @GetMapping("{eventId}")
-    public EventFullDto getUserEvent(@PathVariable @Min(1) long userId, @PathVariable @Min(1) long eventId) {
+    public EventFullDto getUserEvent(
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long eventId) {
         log.info("GET Events by userId={}, eventId={}", userId, eventId);
         return EventMapper.toEventFullDto(eventService.getUserEventById(eventId, userId));
     }
@@ -95,8 +99,9 @@ public class PrivateEventController {
      * Получение информации о запросах на участие в событии текущего пользователя
      */
     @GetMapping("/{eventId}/requests")
-    public Collection<ParticipationRequestDto> getUserEventRequests(@PathVariable @Min(1) long userId,
-                                                                    @PathVariable @Min(1) long eventId) {
+    public Collection<ParticipationRequestDto> getUserEventRequests(
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long eventId) {
         return RequestMapper.toParticipationRequestDtoCollection(
                 requestService.getEventRequests(userId, eventId));
     }

@@ -3,6 +3,7 @@ package ru.practicum.service.request;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.entity.*;
+import ru.practicum.exception.AccessException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.repository.RequestRepository;
 import ru.practicum.service.event.EventService;
@@ -10,12 +11,11 @@ import ru.practicum.service.user.UserService;
 import ru.practicum.util.EventRequestStatusUpdateRequest;
 import ru.practicum.util.EventRequestStatusUpdateResult;
 
-import javax.validation.ValidationException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,11 +34,13 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public Request create(long userId, long eventId) {
         User user = userService.getById(userId);
-        Event event = eventService.getById(eventId);
+        //по тестам если тут ивент не найден должно возвращаться 409, а не 404
+        Event event = eventService.getByIdForRequest(eventId).orElseThrow(
+                () -> new AccessException("Invalid request"));
         if (event.getInitiator().getId() == userId
                 || !event.getState().equals(State.PUBLISHED)
                 || event.getConfirmedRequests() >= event.getParticipantLimit()) {
-            throw new ValidationException("Invalid request");
+            throw new AccessException("Invalid request");
         }
         Request newRequest = Request.builder()
                 .created(Timestamp.valueOf(LocalDateTime.now()))
@@ -50,34 +52,68 @@ public class RequestServiceImpl implements RequestService {
             newRequest.setStatus(Status.CONFIRMED);
         }
 
-        return requestRepository.save(newRequest);
+        newRequest = requestRepository.save(newRequest);
+
+        event.setConfirmedRequests(getRequestsByEventByStatus(event.getId(), Status.CONFIRMED));
+        eventService.save(event);
+
+        return newRequest;
     }
 
     @Override
     public Collection<Request> getEventRequests(long userId, long eventId) {
-        userService.getById(userId);
-        return requestRepository.findAllByRequesterIdAndEventId(userId, eventId);
+        eventService.getUserEventById(eventId, userId);
+        return requestRepository.findAllByEventId(eventId);
     }
 
-    //+++ тут бы отладчиком полазить
     @Override
-    public EventRequestStatusUpdateResult updateStatus(long userId, long eventId, EventRequestStatusUpdateRequest requestStatusUpdate) {
-       // userService.getById(userId);
-        //Collection<Request> requests = getEventRequests(userId, eventId);
+    public EventRequestStatusUpdateResult updateStatus(long userId, long eventId,
+                                                       EventRequestStatusUpdateRequest requestStatusUpdate) {
+        userService.getById(userId);
+        var event = eventService.getById(eventId);
+        var requests = requestRepository.findAllById(requestStatusUpdate.getRequestIds());
 
-//        for (Request request:requests) {
-//            Event event = request.getEvent();
-//            if (event.getParticipantLimit() == 0 || event.getParticipantLimit() > event.getConfirmedRequests()) {
-//                request.setStatus(Status.CONFIRMED);
-//                //eventService.increaseEventConfirmedRequests(event);
-//                requestRepository.save(request);
-//                if (event.getParticipantLimit() == event.getConfirmedRequests()) {
-//                    //rejectAllEventRequestWithStatusPending(eventId);
-//                }
-//            }
-//        }
-        EventRequestStatusUpdateResult requestStatusUpdateResult = new EventRequestStatusUpdateResult();
-        return requestStatusUpdateResult;
+        var countConfirmations = 0;
+        Collection<Request> requestsForUpdate = new ArrayList<>();
+
+        for (Request request : requests) {
+            if (eventId != request.getEvent().getId()) {
+                throw new AccessException("Incorrect event");
+            }
+            //нельзя подтвердить заявку, если уже достигнут лимит по заявкам на данное событие
+            // (Ожидается код ошибки 409)
+            //если при подтверждении данной заявки, лимит заявок для события исчерпан,
+            // то все неподтверждённые заявки необходимо отклонить
+            if (!event.getRequestModeration() || event.getParticipantLimit() == 0
+                    || event.getConfirmedRequests() >= event.getParticipantLimit()
+                    || request.getStatus() != Status.PENDING) {
+                throw new AccessException("Error: confirming request");
+            }
+            if (requestStatusUpdate.getStatus() == Status.CONFIRMED
+                    && (event.getConfirmedRequests() + countConfirmations) < event.getParticipantLimit()) {
+                request.setStatus(Status.CONFIRMED);
+                requestsForUpdate.add(request);
+                countConfirmations++;
+            } else {
+                request.setStatus(Status.REJECTED);
+                requestsForUpdate.add(request);
+            }
+        }
+
+        //сохраняет все запросы
+        requests = requestRepository.saveAll(requestsForUpdate);
+
+        event.setConfirmedRequests(getRequestsByEventByStatus(event.getId(), Status.CONFIRMED));
+        eventService.save(event);
+
+        EventRequestStatusUpdateResult requestResult = new EventRequestStatusUpdateResult();
+        requestResult.setConfirmedRequests(requests.stream()
+                .filter(r -> r.getStatus() == Status.CONFIRMED)
+                .collect(Collectors.toList()));
+        requestResult.setRejectedRequests(requests.stream()
+                .filter(r -> r.getStatus() == Status.REJECTED)
+                .collect(Collectors.toList()));
+        return requestResult;
     }
 
     @Override
@@ -91,6 +127,10 @@ public class RequestServiceImpl implements RequestService {
     private Request getRequestById(long requestId) {
         return requestRepository.findById(requestId).orElseThrow(
                 () -> new NotFoundException("Request with id=" + requestId));
+    }
+
+    private Integer getRequestsByEventByStatus(long eventId, Status status) {
+        return requestRepository.findCountRequestByEventIdAndStatus(eventId, status).orElse(0);
     }
 
 

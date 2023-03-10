@@ -6,12 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.dto.location.LocationRequestDto;
+import ru.practicum.validation.AfterNow;
 import ru.practicum.validation.PlusTwoHours;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
+
+import static ru.practicum.util.Constants.DATE_TIME;
 
 @Data
 @Builder
@@ -25,8 +28,7 @@ public class UpdateEventUserRequest {
     private Long category;
     @Size(max = 7000, min = 20)
     private String description;
-    @PlusTwoHours(message = "Invalid date: cannot be less than two hours from now")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = DATE_TIME)
     private Timestamp eventDate;
 
     private LocationRequestDto location;

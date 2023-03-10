@@ -39,8 +39,7 @@ public class PublicCompilationController {
      * Получение подборки события по его id
      */
     @GetMapping("{compId}")
-    public CompilationDto getById(
-            @PathVariable @Min(1) long compId) {
+    public CompilationDto getById(@PathVariable @Min(0) long compId) {
         log.info("GET compilation compId={}", compId);
         return CompilationMapper.toCompilationDto(
                 compilationService.getById(compId));

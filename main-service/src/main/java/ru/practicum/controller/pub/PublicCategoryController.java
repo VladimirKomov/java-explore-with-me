@@ -37,8 +37,7 @@ public class PublicCategoryController {
      * Получение информации о категории по её идентификатору
      */
     @GetMapping("{catId}")
-    public CategoryResponseDto getById(
-            @PathVariable @Min(1) long catId) {
+    public CategoryResponseDto getById(@PathVariable @Min(0) long catId) {
         log.info("GET category by id={}", catId);
         return CategoryMapper.toCategoryResponseDto(
                 categoryService.findById(catId));

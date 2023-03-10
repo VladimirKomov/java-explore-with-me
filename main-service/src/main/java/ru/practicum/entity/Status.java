@@ -2,8 +2,11 @@ package ru.practicum.entity;
 
 public enum Status {
 
-    PENDING,
+    CONFIRMED,
+
     REJECTED,
+    PENDING,
+
     CANCELED,
-    CONFIRMED
+
 }

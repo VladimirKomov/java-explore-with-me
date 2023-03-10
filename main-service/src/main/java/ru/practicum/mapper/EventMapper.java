@@ -71,7 +71,7 @@ public class EventMapper {
 
     public static Event toEvent(UpdateEventAdminRequest dto) {
         Event event = new Event();
-        if (dto.getAnnotation() != null) event.setLocation(LocationMapper.toLocation(dto.getLocation()));
+        if (dto.getAnnotation() != null) event.setAnnotation(dto.getAnnotation());
         if (dto.getCategory() != null) event.setCategory(Category.builder().id(dto.getCategory()).build());
         if (dto.getDescription() != null) event.setDescription(dto.getDescription());
         if (dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
@@ -79,6 +79,7 @@ public class EventMapper {
         if (dto.getPaid() != null) event.setPaid(dto.getPaid());
         if (dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
         if (dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
+        if (dto.getStateAction() != null) event.setState(findState(dto.getStateAction()));
         if (dto.getTitle() != null) event.setTitle(dto.getTitle());
         return event;
     }
@@ -105,7 +106,7 @@ public class EventMapper {
     }
 
     public static Event updateEvent(Event donor, Event recipient) {
-        if (donor.getAnnotation() != null) recipient.setLocation(donor.getLocation());
+        if (donor.getAnnotation() != null) recipient.setAnnotation(donor.getAnnotation());
         if (donor.getCategory() != null) recipient.setCategory(donor.getCategory());
         if (donor.getDescription() != null) recipient.setDescription(donor.getDescription());
         if (donor.getEventDate() != null) recipient.setEventDate(donor.getEventDate());
@@ -124,7 +125,7 @@ public class EventMapper {
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryResponseDto(event.getCategory()))
                 .confirmedRequests(event.getConfirmedRequests())
-                .eventDate(event.getEventDate().toLocalDateTime())
+                .eventDate(event.getEventDate())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .paid(event.getPaid())
                 .title(event.getTitle())
@@ -133,10 +134,10 @@ public class EventMapper {
     }
 
     public static Collection<EventShortDto> toEventShortDtoCollection(Collection<Event> events) {
-         return events.stream()
+        return events.stream()
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
-         //return eventShortDtos;
+
     }
 
     public static Collection<EventFullDto> toEventFullDtoCollection(Collection<Event> events) {
@@ -164,6 +165,9 @@ public class EventMapper {
     private static State findState(String str) {
         if (str == null) return null;
         if (str.equals("CANCEL_REVIEW")) return State.CANCELED;
+        if (str.equals("PUBLISH_EVENT")) return State.PUBLISHED;
+        if (str.equals("REJECT_EVENT")) return State.CANCELED;
+        if (str.equals("SEND_TO_REVIEW")) return State.PENDING;
         return null;
     }
 }

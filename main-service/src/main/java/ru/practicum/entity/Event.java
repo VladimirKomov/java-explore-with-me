@@ -1,6 +1,8 @@
 package ru.practicum.entity;
 
 import lombok.*;
+import ru.practicum.validation.AfterNow;
+import ru.practicum.validation.PlusTwoHours;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -27,6 +29,8 @@ public class Event {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
+    @AfterNow
+    //@PlusTwoHours
     private Timestamp eventDate;
     @ManyToOne
     @JoinColumn(name = "initiator_id", nullable = false)

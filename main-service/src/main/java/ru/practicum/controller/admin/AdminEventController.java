@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.EventFullDto;
+import ru.practicum.entity.State;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.service.event.EventService;
 import ru.practicum.util.UpdateEventAdminRequest;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
@@ -27,9 +29,9 @@ public class AdminEventController {
     /**
      * Редактирование данных события и его статуса (отклонение/публикация)
      */
-    @PatchMapping("/{eventId}")
-    public EventFullDto update(@Positive @Min(1) long eventId,
-                               @RequestBody UpdateEventAdminRequest request) {
+    @PatchMapping("{eventId}")
+    public EventFullDto update(@PathVariable @Min(0) long eventId,
+                               @Valid @RequestBody UpdateEventAdminRequest request) {
         return EventMapper.toEventFullDto(eventService.updateByAdmin(eventId,
                 EventMapper.toEvent(request)));
     }
@@ -40,7 +42,7 @@ public class AdminEventController {
     @GetMapping
     public Collection<EventFullDto> getAllByParameters(
             @RequestParam(required = false) List<Long> users,
-            @RequestParam(required = false) List<String> states,
+            @RequestParam(required = false) List<State> states,
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) Timestamp rangeStart,
             @RequestParam(required = false) Timestamp rangeEnd,

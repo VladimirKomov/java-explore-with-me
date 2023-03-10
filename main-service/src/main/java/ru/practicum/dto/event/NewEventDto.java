@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
+import static ru.practicum.util.Constants.DATE_TIME;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -28,8 +30,8 @@ public class NewEventDto {
     @NotBlank
     private String description;
     @NotNull
-    @PlusTwoHours(message = "Invalid date: cannot be less than two hours from now")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    //@PlusTwoHours(message = "Invalid date: cannot be less than two hours from now")
+    @JsonFormat(pattern = DATE_TIME)
     private Timestamp eventDate;
     @NotNull
     private LocationRequestDto location;

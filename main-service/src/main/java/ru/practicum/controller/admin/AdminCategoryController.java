@@ -38,7 +38,7 @@ public class AdminCategoryController {
      */
     @DeleteMapping("{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable @Min(1) long catId) {
+    public void deleteById(@PathVariable @Min(0) long catId) {
         log.info("Delete by id={}", catId);
         categoryService.deleteById(catId);
     }
@@ -49,7 +49,7 @@ public class AdminCategoryController {
     @PatchMapping("{catId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryResponseDto update(@Valid @RequestBody NewCategoryDto newCategoryDto,
-                                      @PathVariable @Min(1) long catId) {
+                                      @PathVariable @Min(0) long catId) {
         log.info("Update by id={}, for {}", catId, newCategoryDto.toString());
         return CategoryMapper.toCategoryResponseDto(
                 categoryService.update(catId, CategoryMapper.toCategory(newCategoryDto)));

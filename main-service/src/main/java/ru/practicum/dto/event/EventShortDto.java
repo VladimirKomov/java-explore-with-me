@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import ru.practicum.dto.category.CategoryResponseDto;
 import ru.practicum.dto.user.UserShortDto;
 import ru.practicum.entity.Category;
@@ -13,6 +14,9 @@ import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import static ru.practicum.util.Constants.DATE_TIME;
+
+@Data
 @Builder
 @AllArgsConstructor
 @NotNull
@@ -26,8 +30,8 @@ public class EventShortDto {
     private CategoryResponseDto category;
     private Integer confirmedRequests;
     @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime eventDate;
+    @JsonFormat(pattern = DATE_TIME)
+    private Timestamp eventDate;
     private UserShortDto initiator;
     private Boolean paid;
     @NotNull

@@ -1,5 +1,6 @@
 package ru.practicum.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +20,6 @@ public class ParticipationRequestDto {
     @NotNull
     private Long requester;
     private Status status;
-    @DateTimeFormat(pattern = DATE_TIME)
+    @JsonFormat(pattern = DATE_TIME)
     private LocalDateTime created;
 }

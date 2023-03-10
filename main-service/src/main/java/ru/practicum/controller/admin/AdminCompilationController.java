@@ -9,6 +9,8 @@ import ru.practicum.dto.compliiation.CompilationDto;
 import ru.practicum.dto.compliiation.NewCompilationDto;
 import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.service.compilation.CompilationService;
+import ru.practicum.validation.group.Create;
+import ru.practicum.validation.group.Update;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -27,7 +29,7 @@ public class AdminCompilationController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationDto createCompilation(@Valid @RequestBody NewCompilationDto dto) {
+    public CompilationDto createCompilation(@Validated(Create.class) @RequestBody NewCompilationDto dto) {
         log.info("Create {}", dto.toString());
         return CompilationMapper.toCompilationDto(
                 compilationService.create(CompilationMapper.toCompilation(dto)));
@@ -36,8 +38,9 @@ public class AdminCompilationController {
     /**
      * Удаление подборки
      */
-    @DeleteMapping("/{compId}")
-    public void deleteCompilation(@PathVariable @Min(1) long compId) {
+    @DeleteMapping("{compId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCompilation(@PathVariable @Min(0) long compId) {
         log.info("Delete by id={}", compId);
         compilationService.delete(compId);
     }
@@ -46,9 +49,8 @@ public class AdminCompilationController {
      * Обновление подборки
      */
     @PatchMapping("{compId}")
-    @ResponseStatus(HttpStatus.OK)
-    public CompilationDto update(@Valid @RequestBody NewCompilationDto dto,
-                                 @PathVariable @Min(1) long compId) {
+    public CompilationDto update(@Validated(Update.class) @RequestBody NewCompilationDto dto,
+                                 @PathVariable @Min(0) long compId) {
         log.info("Update by id={}, for {}", compId, dto.toString());
         return CompilationMapper.toCompilationDto(
                 compilationService.update(compId, CompilationMapper.toCompilation(dto)));

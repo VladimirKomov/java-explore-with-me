@@ -26,8 +26,8 @@ public class PrivateRequestController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ParticipationRequestDto createRequest(@PathVariable @Min(1) long userId,
-                                                 @RequestParam @Min(1) long eventId) {
+    public ParticipationRequestDto createRequest(@PathVariable @Min(0) long userId,
+                                                 @RequestParam @Min(0) long eventId) {
         log.info("Create request by userId={} for eventId={}", userId, eventId);
         return RequestMapper.toParticipationRequestDto(requestService.create(userId, eventId));
     }
@@ -36,7 +36,7 @@ public class PrivateRequestController {
      * Получение информации о заявках текущего пользователя на участие в чужих событиях
      */
     @GetMapping
-    public Collection<ParticipationRequestDto> getUserRequests(@PathVariable @Min(1) long userId) {
+    public Collection<ParticipationRequestDto> getUserRequests(@PathVariable @Min(0) long userId) {
         log.info("GET requests by userId={}", userId);
         return RequestMapper.toParticipationRequestDtoCollection(requestService.getAll(userId));
     }
@@ -45,8 +45,8 @@ public class PrivateRequestController {
      * Отмена своего запроса на участие в событии
      */
     @PatchMapping("{requestId}/cancel")
-    public ParticipationRequestDto cancelRequest(@PathVariable @Min(1) long userId,
-                                                 @PathVariable @Min(1) long requestId) {
+    public ParticipationRequestDto cancelRequest(@PathVariable @Min(0) long userId,
+                                                 @PathVariable @Min(0) long requestId) {
         log.info("Patch requests by userId={} for requestId", userId, requestId);
         return RequestMapper.toParticipationRequestDto(requestService.cancelRequest(userId, requestId));
     }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.entity.*;
+import ru.practicum.exception.AccessException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.repository.EventRepository;
@@ -16,6 +17,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -41,14 +43,13 @@ public class EventServiceImpl implements EventService {
         event.setState(State.PENDING);
         event.setViews(0);
 
-        return eventRepository.save(event);
+        return save(event);
     }
 
+    //Запись ивента
     @Override
-    public Event update(long userId, long eventId, Event donor) {
-        Event recipient = getUserEventById(eventId, userId);
-        recipient = updateEvent(donor, recipient);
-        return eventRepository.save(recipient);
+    public Event save(Event event) {
+        return eventRepository.save(event);
     }
 
     @Override
@@ -58,10 +59,16 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Collection<Event> getAllByParameters(List<Long> users, List<String> states, List<Long> categories,
+    public Collection<Event> getAll(Collection<Long> eventIds) {
+        return eventRepository.findAllById(eventIds);
+    }
+
+    @Override
+    public Collection<Event> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
                                                 Timestamp rangeStart, Timestamp rangeEnd, int from, int size) {
-        if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.MAX);
-        if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.MIN);
+        if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now().minusYears(100));
+        if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
+
         return eventRepository.findByParameters(users, states, categories,
                 rangeStart, rangeEnd, PageRequest.of(from, size));
     }
@@ -70,17 +77,23 @@ public class EventServiceImpl implements EventService {
     public Collection<Event> getAllByParametersPublic(String text, List<Long> categories, Boolean paid,
                                                       Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable,
                                                       SortEvent sort, int from, int size) {
-        if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.MAX);
-        if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.MIN);
-        return eventRepository.findByParametersForPublic(text, categories, paid,
-                rangeStart, rangeEnd, onlyAvailable, PageRequest.of(from, size));
+        if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now());
+        if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
+
+        return eventRepository.findByParametersForPublic(
+                text.toLowerCase(),
+                categories,
+                paid,
+                rangeStart,
+                rangeEnd,
+                onlyAvailable,
+                PageRequest.of(from, size));
     }
 
-    //+++ошибка, нужен эвент пользователя, а не любой
     @Override
     public Event getUserEventById(long eventId, long userId) {
         userService.getById(userId);
-        return eventRepository.findById(eventId).orElseThrow(
+        return eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(
                 () -> new NotFoundException("Event with id=" + eventId));
     }
 
@@ -91,10 +104,34 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public Event update(long userId, long eventId, Event donor) {
+        Event recipient = getUserEventById(eventId, userId);
+        if (recipient.getState() == State.PUBLISHED)
+        //   || recipient.getState() == State.REJECTED)
+        {
+            throw new AccessException("Error: event state");
+        }
+        //if (donor.getInitiator().getId() == userId) throw new AccessException("Incorrect: userId");
+        //if (!recipient.getState().equals(State.PENDING)) throw new AccessException("Event not pending");
+
+        recipient = updateEvent(donor, recipient);
+        //recipient.setState(State.PENDING);
+        return save(recipient);
+    }
+
+    @Override
     public Event updateByAdmin(long eventId, Event donor) {
         Event recipient = getById(eventId);
+        if (!recipient.getState().equals(State.PENDING)) throw new AccessException("Event not pending");
         recipient = updateEvent(donor, recipient);
-        return eventRepository.save(recipient);
+        //recipient.setState(State.PUBLISHED);
+        return save(recipient);
+    }
+
+    //по тестам если тут ивент не найден для запроса возвращаться 409, а не 404
+    @Override
+    public Optional<Event> getByIdForRequest(long eventId) {
+        return eventRepository.findById(eventId);
     }
 
     private Event updateEvent(Event donor, Event recipient) {

@@ -54,7 +54,7 @@ public class PublicEventController {
      */
     @GetMapping("{id}")
     public EventFullDto getById(
-            @PathVariable @Min(1) long id) {
+            @PathVariable @Min(0) long id) {
         log.info("GET event by id={}", id);
         return EventMapper.toEventFullDto(
                 eventService.getById(id));
