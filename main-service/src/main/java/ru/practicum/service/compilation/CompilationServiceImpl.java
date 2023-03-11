@@ -3,6 +3,7 @@ package ru.practicum.service.compilation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.entity.Compilation;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.CompilationMapper;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CompilationServiceImpl implements CompilationService {
 

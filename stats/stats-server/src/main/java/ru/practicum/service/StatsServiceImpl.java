@@ -2,6 +2,7 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.entity.EndpointHit;
 import ru.practicum.entity.ViewStats;
 import ru.practicum.repository.StatsRepository;
@@ -11,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class StatsServiceImpl implements StatsService {
 

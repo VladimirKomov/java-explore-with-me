@@ -32,7 +32,6 @@ public class Event {
     private String description;
     @Column(nullable = false)
     @AfterNow
-    //@PlusTwoHours
     private Timestamp eventDate;
     @ManyToOne
     @JoinColumn(name = "initiator_id", nullable = false)

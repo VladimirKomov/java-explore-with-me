@@ -3,6 +3,7 @@ package ru.practicum.service.event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.entity.*;
 import ru.practicum.exception.AccessException;
 import ru.practicum.exception.NotFoundException;
@@ -12,7 +13,6 @@ import ru.practicum.repository.LocationRepository;
 import ru.practicum.service.category.CategoryService;
 import ru.practicum.service.user.UserService;
 
-import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -80,14 +80,25 @@ public class EventServiceImpl implements EventService {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now());
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
 
-        return eventRepository.findByParametersForPublic(
-                text.toLowerCase(),
-                categories,
-                paid,
-                rangeStart,
-                rangeEnd,
-                onlyAvailable,
-                PageRequest.of(from, size));
+        if (sort == null || sort.equals(SortEvent.EVENT_DATE)) {
+            return eventRepository.findByParametersForPublicSortEventDate(
+                    text.toLowerCase(),
+                    categories,
+                    paid,
+                    rangeStart,
+                    rangeEnd,
+                    onlyAvailable,
+                    PageRequest.of(from, size));
+        } else {
+            return eventRepository.findByParametersForPublicSortViews(
+                    text.toLowerCase(),
+                    categories,
+                    paid,
+                    rangeStart,
+                    rangeEnd,
+                    onlyAvailable,
+                    PageRequest.of(from, size));
+        }
     }
 
     @Override
