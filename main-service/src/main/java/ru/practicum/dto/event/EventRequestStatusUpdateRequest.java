@@ -1,4 +1,4 @@
-package ru.practicum.util;
+package ru.practicum.dto.event;
 
 import lombok.Data;
 import ru.practicum.entity.Status;

@@ -12,7 +12,6 @@ import ru.practicum.service.compilation.CompilationService;
 import ru.practicum.validation.group.Create;
 import ru.practicum.validation.group.Update;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 @Validated

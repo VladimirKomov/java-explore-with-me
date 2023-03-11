@@ -1,8 +1,10 @@
 package ru.practicum.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.validation.AfterNow;
-import ru.practicum.validation.PlusTwoHours;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

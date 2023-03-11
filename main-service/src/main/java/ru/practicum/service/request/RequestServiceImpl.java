@@ -2,14 +2,14 @@ package ru.practicum.service.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.dto.event.EventRequestStatusUpdateRequest;
+import ru.practicum.dto.event.EventRequestStatusUpdateResult;
 import ru.practicum.entity.*;
 import ru.practicum.exception.AccessException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.repository.RequestRepository;
 import ru.practicum.service.event.EventService;
 import ru.practicum.service.user.UserService;
-import ru.practicum.util.EventRequestStatusUpdateRequest;
-import ru.practicum.util.EventRequestStatusUpdateResult;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

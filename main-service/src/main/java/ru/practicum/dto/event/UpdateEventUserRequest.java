@@ -6,11 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.dto.location.LocationRequestDto;
-import ru.practicum.validation.AfterNow;
-import ru.practicum.validation.PlusTwoHours;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
@@ -32,7 +28,7 @@ public class UpdateEventUserRequest {
     private Timestamp eventDate;
 
     private LocationRequestDto location;
-    private Boolean paid ;
+    private Boolean paid;
     private Integer participantLimit;
     private Boolean requestModeration;
     private String stateAction;

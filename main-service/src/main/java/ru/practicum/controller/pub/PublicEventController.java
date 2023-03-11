@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.StatsClient;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.entity.SortEvent;
@@ -24,7 +25,8 @@ import java.util.List;
 public class PublicEventController {
 
     private final EventService eventService;
-    //private final StatsClient statsClient;
+    private final StatsClient statsClient;
+
 
     /**
      * Получение событий с возможностью фильтрации
@@ -43,7 +45,7 @@ public class PublicEventController {
         log.info("GET events by text={}, categories={}, paid={}, rangeStart={}, rangeEnd{}, " +
                         "onlyAvailable={}, sort={}, from={}, size={}",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
-        //statsClient.createHit(request);
+        statsClient.createHit(request);
         return EventMapper.toEventShortDtoCollection(
                 eventService.getAllByParametersPublic(text, categories, paid, rangeStart,
                         rangeEnd, onlyAvailable, sort, from, size));
@@ -54,8 +56,9 @@ public class PublicEventController {
      */
     @GetMapping("{id}")
     public EventFullDto getById(
-            @PathVariable @Min(0) long id) {
+            @PathVariable @Min(0) long id, HttpServletRequest request) {
         log.info("GET event by id={}", id);
+        statsClient.createHit(request);
         return EventMapper.toEventFullDto(
                 eventService.getById(id));
     }

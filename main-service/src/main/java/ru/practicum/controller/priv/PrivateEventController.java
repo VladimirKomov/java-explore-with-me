@@ -15,7 +15,7 @@ import ru.practicum.mapper.EventMapper;
 import ru.practicum.mapper.RequestMapper;
 import ru.practicum.service.event.EventService;
 import ru.practicum.service.request.RequestService;
-import ru.practicum.util.EventRequestStatusUpdateRequest;
+import ru.practicum.dto.event.EventRequestStatusUpdateRequest;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;

@@ -8,11 +8,10 @@ import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.entity.State;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.service.event.EventService;
-import ru.practicum.util.UpdateEventAdminRequest;
+import ru.practicum.dto.event.UpdateEventAdminRequest;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;

@@ -1,14 +1,10 @@
 package ru.practicum.mapper;
 
-import ru.practicum.dto.event.EventFullDto;
-import ru.practicum.dto.event.EventShortDto;
-import ru.practicum.dto.event.NewEventDto;
-import ru.practicum.dto.event.UpdateEventUserRequest;
+import ru.practicum.dto.event.*;
 import ru.practicum.entity.Category;
 import ru.practicum.entity.Event;
 import ru.practicum.entity.Location;
 import ru.practicum.entity.State;
-import ru.practicum.util.UpdateEventAdminRequest;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -19,68 +15,63 @@ public class EventMapper {
         return Event.builder()
                 .annotation(dto.getAnnotation())
                 .category(Category.builder().id(dto.getCategory()).build())
-                //.confirmedRequests()
-                //-.createdOn()
                 .description(dto.getDescription())
                 .eventDate(dto.getEventDate())
-                //.initiator(User.builder().id(dto.get).build())
                 .location(Location.builder().lat(dto.getLocation().getLat()).lon(dto.getLocation().getLon()).build())
                 .paid(dto.isPaid())
                 .participantLimit(dto.getParticipantLimit())
-                //- .publishedOn()
                 .requestModeration(dto.isRequestModeration())
-                //?.state()
                 .title(dto.getTitle())
-                //views()
                 .build();
     }
 
-    //объеденить в один
-    public static Event toEvent(UpdateEventUserRequest dto) {
+    public static Event toEvent(UpdateEventUserRequest updateUserDto) {
         Event event = new Event();
-        if (dto.getAnnotation() != null) event.setLocation(LocationMapper.toLocation(dto.getLocation()));
-        if (dto.getCategory() != null) event.setCategory(Category.builder().id(dto.getCategory()).build());
-        if (dto.getDescription() != null) event.setDescription(dto.getDescription());
-        if (dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
-        if (dto.getLocation() != null) event.setLocation(LocationMapper.toLocation(dto.getLocation()));
-        if (dto.getPaid() != null) event.setPaid(dto.getPaid());
-        if (dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
-        if (dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
-        if (dto.getStateAction() != null) event.setState(findState(dto.getStateAction()));
-        if (dto.getTitle() != null) event.setTitle(dto.getTitle());
+        if (updateUserDto.getAnnotation() != null) event.setLocation(
+                LocationMapper.toLocation(updateUserDto.getLocation()));
+        if (updateUserDto.getCategory() != null) event.setCategory(
+                Category.builder().id(updateUserDto.getCategory()).build());
+        if (updateUserDto.getDescription() != null) event.setDescription(
+                updateUserDto.getDescription());
+        if (updateUserDto.getEventDate() != null) event.setEventDate(
+                updateUserDto.getEventDate());
+        if (updateUserDto.getLocation() != null) event.setLocation(LocationMapper.toLocation(
+                updateUserDto.getLocation()));
+        if (updateUserDto.getPaid() != null) event.setPaid(
+                updateUserDto.getPaid());
+        if (updateUserDto.getParticipantLimit() != null) event.setParticipantLimit(
+                updateUserDto.getParticipantLimit());
+        if (updateUserDto.getRequestModeration() != null) event.setRequestModeration(
+                updateUserDto.getRequestModeration());
+        if (updateUserDto.getStateAction() != null) event.setState(findState(
+                updateUserDto.getStateAction()));
+        if (updateUserDto.getTitle() != null) event.setTitle(
+                updateUserDto.getTitle());
         return event;
-
-
-//        return Event.builder()
-//                .annotation(dto.getAnnotation())
-//                .category(Category.builder().id(dto.getCategory()).build())
-//                //-.createdOn()
-//                .description(dto.getDescription())
-//                .eventDate(dto.getEventDate())
-//                //+.initiator()
-//                .location(Location.builder().lat(dto.getLocation().getLat()).lon(dto.getLocation().getLon()).build())
-//                .paid(dto.getPaid())
-//                .participantLimit(dto.getParticipantLimit())
-//                //- .publishedOn()
-//                .requestModeration(dto.getRequestModeration())
-//                .state(findState(dto.getStateAction()))
-//                .title(dto.getTitle())
-//                //views()
-//                .build();
     }
 
-    public static Event toEvent(UpdateEventAdminRequest dto) {
+    public static Event toEvent(UpdateEventAdminRequest updateAdminDto) {
         Event event = new Event();
-        if (dto.getAnnotation() != null) event.setAnnotation(dto.getAnnotation());
-        if (dto.getCategory() != null) event.setCategory(Category.builder().id(dto.getCategory()).build());
-        if (dto.getDescription() != null) event.setDescription(dto.getDescription());
-        if (dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
-        if (dto.getLocation() != null) event.setLocation(LocationMapper.toLocation(dto.getLocation()));
-        if (dto.getPaid() != null) event.setPaid(dto.getPaid());
-        if (dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
-        if (dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
-        if (dto.getStateAction() != null) event.setState(findState(dto.getStateAction()));
-        if (dto.getTitle() != null) event.setTitle(dto.getTitle());
+        if (updateAdminDto.getAnnotation() != null) event.setAnnotation(
+                updateAdminDto.getAnnotation());
+        if (updateAdminDto.getCategory() != null) event.setCategory(
+                Category.builder().id(updateAdminDto.getCategory()).build());
+        if (updateAdminDto.getDescription() != null) event.setDescription(
+                updateAdminDto.getDescription());
+        if (updateAdminDto.getEventDate() != null) event.setEventDate(
+                updateAdminDto.getEventDate());
+        if (updateAdminDto.getLocation() != null) event.setLocation(
+                LocationMapper.toLocation(updateAdminDto.getLocation()));
+        if (updateAdminDto.getPaid() != null) event.setPaid(
+                updateAdminDto.getPaid());
+        if (updateAdminDto.getParticipantLimit() != null) event.setParticipantLimit(
+                updateAdminDto.getParticipantLimit());
+        if (updateAdminDto.getRequestModeration() != null) event.setRequestModeration(
+                updateAdminDto.getRequestModeration());
+        if (updateAdminDto.getStateAction() != null) event.setState(findState(
+                updateAdminDto.getStateAction()));
+        if (updateAdminDto.getTitle() != null) event.setTitle(
+                updateAdminDto.getTitle());
         return event;
     }
 
@@ -145,22 +136,6 @@ public class EventMapper {
                 .map(EventMapper::toEventFullDto)
                 .collect(Collectors.toList());
     }
-
-//    private static Event updateFields(Event event, Object donor){
-//        if (donor.getClass()==Event.class) {
-//            donor = new Event(donor);
-//            if (donor.getAnnotation() != null) recipient.setLocation(donor.getLocation());
-//            if (donor.getCategory() != null) recipient.setCategory(donor.getCategory());
-//            if (donor.getDescription() != null) recipient.setDescription(donor.getDescription());
-//            if (donor.getEventDate() != null) recipient.setEventDate(donor.getEventDate());
-//            if (donor.getLocation() != null) recipient.setLocation(donor.getLocation());
-//            if (donor.getPaid() != null) recipient.setPaid(donor.getPaid());
-//            if (donor.getParticipantLimit() != null) recipient.setParticipantLimit(donor.getParticipantLimit());
-//            if (donor.getRequestModeration() != null) recipient.setRequestModeration(donor.getRequestModeration());
-//            if (donor.getState() != null) recipient.setState(donor.getState());
-//            if (donor.getTitle() != null) recipient.setTitle(donor.getTitle());
-//        }
-//    }
 
     private static State findState(String str) {
         if (str == null) return null;

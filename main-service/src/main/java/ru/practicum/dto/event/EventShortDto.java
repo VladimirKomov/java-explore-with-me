@@ -1,18 +1,15 @@
 package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import ru.practicum.dto.category.CategoryResponseDto;
 import ru.practicum.dto.user.UserShortDto;
-import ru.practicum.entity.Category;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 import static ru.practicum.util.Constants.DATE_TIME;
 

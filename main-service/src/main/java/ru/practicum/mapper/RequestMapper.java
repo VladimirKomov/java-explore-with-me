@@ -1,8 +1,8 @@
 package ru.practicum.mapper;
 
+import ru.practicum.dto.event.EventRequestStatusUpdateResult;
 import ru.practicum.dto.request.EventRequestStatusUpdateResultDto;
 import ru.practicum.dto.request.ParticipationRequestDto;
-import ru.practicum.util.EventRequestStatusUpdateResult;
 import ru.practicum.entity.Request;
 
 import java.util.Collection;

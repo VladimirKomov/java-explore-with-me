@@ -9,7 +9,7 @@ import java.util.Collection;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("FROM User WHERE id in :ids or :ids is null")
+    @Query("FROM User WHERE :ids is null or id in :ids")
     Collection<User> findByIdIn(Collection<Long> ids, PageRequest pageRequest);
 
 }

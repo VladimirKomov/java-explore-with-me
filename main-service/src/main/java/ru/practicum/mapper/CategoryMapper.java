@@ -1,7 +1,7 @@
 package ru.practicum.mapper;
 
-import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.dto.category.CategoryResponseDto;
+import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.entity.Category;
 
 import java.util.Collection;

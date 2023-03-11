@@ -1,4 +1,4 @@
-package ru.practicum.util;
+package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.dto.location.LocationRequestDto;
 
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 import static ru.practicum.util.Constants.DATE_TIME;

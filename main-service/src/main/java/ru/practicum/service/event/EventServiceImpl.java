@@ -106,16 +106,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event update(long userId, long eventId, Event donor) {
         Event recipient = getUserEventById(eventId, userId);
-        if (recipient.getState() == State.PUBLISHED)
-        //   || recipient.getState() == State.REJECTED)
-        {
+        if (recipient.getState() == State.PUBLISHED) {
             throw new AccessException("Error: event state");
         }
-        //if (donor.getInitiator().getId() == userId) throw new AccessException("Incorrect: userId");
-        //if (!recipient.getState().equals(State.PENDING)) throw new AccessException("Event not pending");
-
         recipient = updateEvent(donor, recipient);
-        //recipient.setState(State.PENDING);
+
         return save(recipient);
     }
 
@@ -124,11 +119,11 @@ public class EventServiceImpl implements EventService {
         Event recipient = getById(eventId);
         if (!recipient.getState().equals(State.PENDING)) throw new AccessException("Event not pending");
         recipient = updateEvent(donor, recipient);
-        //recipient.setState(State.PUBLISHED);
+
         return save(recipient);
     }
 
-    //по тестам если тут ивент не найден для запроса возвращаться 409, а не 404
+    //по тестам если ивент не найден для запроса возвращаться 409, а не 404
     @Override
     public Optional<Event> getByIdForRequest(long eventId) {
         return eventRepository.findById(eventId);
