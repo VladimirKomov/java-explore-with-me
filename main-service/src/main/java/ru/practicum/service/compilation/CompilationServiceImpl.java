@@ -5,12 +5,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.entity.Compilation;
+import ru.practicum.entity.Event;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.repository.CompilationRepository;
 import ru.practicum.service.event.EventService;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 
@@ -29,11 +31,11 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public Compilation create(Compilation compilation) {
-        compilation.setEvents(eventService.getAll(
+        compilation.setEvents(new HashSet<>(eventService.getAll(
                 compilation.getEvents().stream()
-                        .map(event -> event.getId())
+                        .map(Event::getId)
                         .collect(Collectors.toList())
-        ).stream().collect(Collectors.toSet()));
+        )));
 
         return compilationRepository.save(compilation);
     }
@@ -47,6 +49,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public void delete(long compId) {
+        getById(compId);
         compilationRepository.deleteById(compId);
     }
 

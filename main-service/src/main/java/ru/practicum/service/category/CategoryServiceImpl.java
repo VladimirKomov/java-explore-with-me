@@ -24,6 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteById(long catId) {
+        findById(catId);
         categoryRepository.deleteById(catId);
     }
 

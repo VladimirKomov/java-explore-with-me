@@ -79,10 +79,11 @@ public class EventServiceImpl implements EventService {
                                                       SortEvent sort, int from, int size) {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now());
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
+        if (text != null) text = text.toLowerCase();
 
         if (sort == null || sort.equals(SortEvent.EVENT_DATE)) {
             return eventRepository.findByParametersForPublicSortEventDate(
-                    text.toLowerCase(),
+                    text,
                     categories,
                     paid,
                     rangeStart,
@@ -91,7 +92,7 @@ public class EventServiceImpl implements EventService {
                     PageRequest.of(from, size));
         } else {
             return eventRepository.findByParametersForPublicSortViews(
-                    text.toLowerCase(),
+                    text,
                     categories,
                     paid,
                     rangeStart,
