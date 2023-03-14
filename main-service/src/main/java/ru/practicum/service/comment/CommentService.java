@@ -12,7 +12,7 @@ public interface CommentService {
 
     Comment create(long userId, long eventId, Comment comment);
 
-    Comment update(long userId, long commentId, Comment Comment);
+    Comment update(long userId, long commentId, Comment comment);
 
     Comment getById(long id);
 

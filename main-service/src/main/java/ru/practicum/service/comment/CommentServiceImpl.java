@@ -79,11 +79,11 @@ public class CommentServiceImpl implements CommentService {
         eventService.getById(eventId);
 
         if (sort.equals(SortComment.ASC)) {
-            return commentRepository.
-                    findAllByAuthorIdAndAndEventIdOrderByCreatedOnAsc(userId, eventId, PageRequest.of(from, size));
+            return commentRepository
+                    .findAllByAuthorIdAndEventIdOrderByCreatedOnAsc(userId, eventId, PageRequest.of(from, size));
         }
-        return commentRepository.
-                findAllByAuthorIdAndEventIdOrderByCreatedOnDesc(userId, eventId, PageRequest.of(from, size));
+        return commentRepository
+                .findAllByAuthorIdAndEventIdOrderByCreatedOnDesc(userId, eventId, PageRequest.of(from, size));
     }
 
     @Override

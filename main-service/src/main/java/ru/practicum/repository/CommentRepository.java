@@ -19,8 +19,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Collection<Comment> findAllByAuthorIdOrderByCreatedOnDesc(long userId, PageRequest pageRequest);
 
-    Collection<Comment> findAllByAuthorIdAndAndEventIdOrderByCreatedOnAsc(long userId, long eventId,
-                                                                          PageRequest pageRequest);
+    Collection<Comment> findAllByAuthorIdAndEventIdOrderByCreatedOnAsc(long userId, long eventId,
+                                                                       PageRequest pageRequest);
 
     Collection<Comment> findAllByAuthorIdAndEventIdOrderByCreatedOnDesc(long userId, long eventId,
                                                                         PageRequest pageRequest);
