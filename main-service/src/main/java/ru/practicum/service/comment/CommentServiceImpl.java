@@ -17,6 +17,7 @@ import javax.validation.ValidationException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @Transactional
@@ -102,6 +103,34 @@ public class CommentServiceImpl implements CommentService {
         recipient = updateFields(comment, recipient);
 
         return commentRepository.save(recipient);
+    }
+
+    @Override
+    public Collection<Comment> getAllByParametersPublic(String text, List<Long> commentIds,
+                                                        Timestamp rangeStart, Timestamp rangeEnd,
+                                                        boolean onlyUpdate, SortComment sort, int from, int size) {
+        if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now());
+        if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
+        if (text != null) text = text.toLowerCase();
+
+        if (sort == null || sort.equals(SortComment.ASC)) {
+            return commentRepository.findByParametersForPublicSortAsc(
+                    text,
+                    commentIds,
+                    rangeStart,
+                    rangeEnd,
+                    onlyUpdate,
+                    PageRequest.of(from, size));
+        } else {
+            return commentRepository.findByParametersForPublicSortDes(
+                    text,
+                    commentIds,
+                    rangeStart,
+                    rangeEnd,
+                    onlyUpdate,
+                    PageRequest.of(from, size));
+        }
+
     }
 
     private Comment updateFields(Comment comment, Comment recipient) {

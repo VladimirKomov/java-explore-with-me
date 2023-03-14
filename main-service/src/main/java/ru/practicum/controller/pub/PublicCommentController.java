@@ -10,7 +10,9 @@ import ru.practicum.mapper.CommentMapper;
 import ru.practicum.service.comment.CommentService;
 
 import javax.validation.constraints.Min;
+import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/comments")
@@ -74,5 +76,27 @@ public class PublicCommentController {
         log.info("GET comments userId={} by eventId={}, from={}, size={}", userId, eventId, from, size);
         return CommentMapper.toCommentResponseDtoCollection(
                 commentService.getByUserIdEventId(userId, eventId, sort, from, size));
+    }
+
+    /**
+     * Получение комментариев с возможностью фильтрации
+     */
+    @GetMapping
+    public Collection<CommentResponseDto> getFilteredComments(
+            @RequestParam(required = false) String text,
+            @RequestParam(required = false) List<Long> commentIds,
+            @RequestParam(required = false) Timestamp rangeStart,
+            @RequestParam(required = false) Timestamp rangeEnd,
+            @RequestParam(defaultValue = "false") boolean onlyUpdate,
+            @RequestParam(required = false) SortComment sort,
+            @RequestParam(defaultValue = "0") @Min(0) int from,
+            @RequestParam(defaultValue = "10") @Min(1) int size) {
+        log.info("GET comments by text={}, commentIds={}, rangeStart={}, rangeEnd{}, " +
+                        "onlyAvailable={}, sort={}, from={}, size={}",
+                text, commentIds, rangeStart, rangeEnd, onlyUpdate, sort, from, size);
+
+        return CommentMapper.toCommentResponseDtoCollection(
+                commentService.getAllByParametersPublic(text, commentIds, rangeStart,
+                        rangeEnd, onlyUpdate, sort, from, size));
     }
 }

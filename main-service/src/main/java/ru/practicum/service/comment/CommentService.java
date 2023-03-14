@@ -4,7 +4,9 @@ import ru.practicum.entity.Comment;
 import ru.practicum.entity.SortComment;
 
 import javax.validation.constraints.Min;
+import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 public interface CommentService {
 
@@ -25,4 +27,8 @@ public interface CommentService {
     void deleteByIdForAdmin(long commentId);
 
     Comment updateForAdmin(long commentId, Comment comment);
+
+    Collection<Comment> getAllByParametersPublic(String text, List<Long> commentIds,
+                                                 Timestamp rangeStart, Timestamp rangeEnd,
+                                                 boolean onlyUpdate, SortComment sort, int from, int size);
 }
