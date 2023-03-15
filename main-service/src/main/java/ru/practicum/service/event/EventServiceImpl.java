@@ -111,8 +111,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event getById(long eventId) {
-        return eventRepository.findById(eventId).orElseThrow(
+        Event event = eventRepository.findById(eventId).orElseThrow(
                 () -> new NotFoundException("Event with id=" + eventId));
+        addView(List.of(event));
+        return event;
     }
 
     @Override
@@ -152,5 +154,12 @@ public class EventServiceImpl implements EventService {
     private Location getLocation(Location location) {
         return locationRepository.findByLatAndLon(location.getLat(),
                 location.getLon()).orElse(locationRepository.save(location));
+    }
+
+    //просмотр увеличивается при получении полного события,
+    // списки, подборки и администрирование не влияют на счетчик просмотров.
+    private void addView(Collection<Event> events) {
+        events.forEach(e -> e.setViews(e.getViews() + 1));
+        eventRepository.saveAll(events);
     }
 }

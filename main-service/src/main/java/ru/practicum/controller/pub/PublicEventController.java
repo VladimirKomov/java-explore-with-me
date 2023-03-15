@@ -52,7 +52,7 @@ public class PublicEventController {
     }
 
     /**
-     * Получение информации о категории по её идентификатору
+     * Получение события по его идентификатору
      */
     @GetMapping("{id}")
     public EventFullDto getById(
