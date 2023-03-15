@@ -60,7 +60,7 @@ public class PublicEventController {
         log.info("GET event by id={}", id);
         statsClient.createHit(request);
         return EventMapper.toEventFullDto(
-                eventService.getById(id));
+                eventService.getByIdForPublic(id));
     }
 
 
