@@ -32,6 +32,8 @@ public interface EventService {
 
     Event getById(long eventId);
 
+    Event getByIdForPublic(long eventId);
+
     Event updateByAdmin(long eventId, Event event);
 
     Optional<Event> getByIdForRequest(long eventId);

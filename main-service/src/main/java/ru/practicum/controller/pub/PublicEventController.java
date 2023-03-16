@@ -52,7 +52,7 @@ public class PublicEventController {
     }
 
     /**
-     * Получение информации о категории по её идентификатору
+     * Получение события по его идентификатору
      */
     @GetMapping("{id}")
     public EventFullDto getById(
@@ -60,7 +60,7 @@ public class PublicEventController {
         log.info("GET event by id={}", id);
         statsClient.createHit(request);
         return EventMapper.toEventFullDto(
-                eventService.getById(id));
+                eventService.getByIdForPublic(id));
     }
 
 

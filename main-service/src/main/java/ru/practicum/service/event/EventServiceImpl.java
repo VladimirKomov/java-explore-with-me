@@ -116,6 +116,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public Event getByIdForPublic(long eventId) {
+        return addView(getById(eventId));
+    }
+
+    @Override
     public Event update(long userId, long eventId, Event donor) {
         Event recipient = getUserEventById(eventId, userId);
         if (recipient.getState() == State.PUBLISHED) {
@@ -152,5 +157,12 @@ public class EventServiceImpl implements EventService {
     private Location getLocation(Location location) {
         return locationRepository.findByLatAndLon(location.getLat(),
                 location.getLon()).orElse(locationRepository.save(location));
+    }
+
+    //просмотр увеличивается при получении полного события,
+    // списки, подборки и администрирование не влияют на счетчик просмотров.
+    private Event addView(Event event) {
+        event.setViews(event.getViews() + 1);
+        return save(event);
     }
 }
