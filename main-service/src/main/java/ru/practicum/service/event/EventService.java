@@ -1,8 +1,8 @@
 package ru.practicum.service.event;
 
 import ru.practicum.entity.Event;
-import ru.practicum.entity.SortEvent;
-import ru.practicum.entity.State;
+import ru.practicum.util.SortEvent;
+import ru.practicum.util.State;
 
 import java.sql.Timestamp;
 import java.util.Collection;

@@ -1,7 +1,7 @@
 package ru.practicum.service.comment;
 
 import ru.practicum.entity.Comment;
-import ru.practicum.entity.SortComment;
+import ru.practicum.util.SortComment;
 
 import javax.validation.constraints.Min;
 import java.sql.Timestamp;

@@ -4,7 +4,7 @@ import ru.practicum.dto.event.*;
 import ru.practicum.entity.Category;
 import ru.practicum.entity.Event;
 import ru.practicum.entity.Location;
-import ru.practicum.entity.State;
+import ru.practicum.util.State;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

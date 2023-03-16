@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.StatsClient;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
-import ru.practicum.entity.SortEvent;
+import ru.practicum.util.SortEvent;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.service.event.EventService;
 

@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.entity.Comment;
-import ru.practicum.entity.SortComment;
+import ru.practicum.util.SortComment;
 import ru.practicum.entity.User;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.CommentMapper;

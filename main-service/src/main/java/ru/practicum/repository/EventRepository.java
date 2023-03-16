@@ -4,7 +4,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.entity.Event;
-import ru.practicum.entity.State;
+import ru.practicum.util.State;
 
 import java.sql.Timestamp;
 import java.util.Collection;

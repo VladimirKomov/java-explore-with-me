@@ -1,6 +1,7 @@
 package ru.practicum.entity;
 
 import lombok.*;
+import ru.practicum.util.State;
 import ru.practicum.validation.AfterNow;
 
 import javax.persistence.*;

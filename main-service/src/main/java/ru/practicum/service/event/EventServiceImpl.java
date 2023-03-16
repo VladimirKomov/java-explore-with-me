@@ -12,6 +12,8 @@ import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.LocationRepository;
 import ru.practicum.service.category.CategoryService;
 import ru.practicum.service.user.UserService;
+import ru.practicum.util.SortEvent;
+import ru.practicum.util.State;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

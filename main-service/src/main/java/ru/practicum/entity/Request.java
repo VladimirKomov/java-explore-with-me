@@ -1,6 +1,7 @@
 package ru.practicum.entity;
 
 import lombok.*;
+import ru.practicum.util.Status;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

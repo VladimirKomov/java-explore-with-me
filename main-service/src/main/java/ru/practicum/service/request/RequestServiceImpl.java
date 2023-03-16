@@ -11,6 +11,8 @@ import ru.practicum.exception.NotFoundException;
 import ru.practicum.repository.RequestRepository;
 import ru.practicum.service.event.EventService;
 import ru.practicum.service.user.UserService;
+import ru.practicum.util.State;
+import ru.practicum.util.Status;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
